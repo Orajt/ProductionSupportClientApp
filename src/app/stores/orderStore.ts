@@ -1,32 +1,47 @@
-import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { OrderDetails, OrderFormValues, OrderListElem } from "../../models/orders";
+import { makeAutoObservable, runInAction } from "mobx";
+import { OrderDetails, OrderFormValues, OrderListElem, OrderSummary } from "../../models/orders";
+import { PagingParams, Pagination } from "../../models/pagination";
 import agent from "../api/agent";
+import { Utilities } from "../common/utilities/Utilities";
+import { FilterResult } from "../models/filter";
 
 export default class OrderStore {
     constructor() {
         makeAutoObservable(this);
     }
     orderList = [] as OrderListElem[];
-    loading = false;
+    loading = true;
     orderDetails: OrderDetails | null = null;
     orderPositionsToRemove = [] as number[];
     ableToDeletePositions: boolean = false;
+    pagination: Pagination | null = null;
+    pagingParams=new PagingParams();
+    orderSummary: OrderSummary | null = null;
 
     clear = () => {
+        this.loading=true;
         this.orderList = [];
         this.orderDetails=null;
         this.orderPositionsToRemove=[];
+        this.pagination=null;
+        this.pagingParams=new PagingParams();
     }
 
-    getOrderList = async () => {
+    getOrderList = async (filters: FilterResult[]) => {
         try {
             this.loading = true;
-            const orderList = await agent.Order.getList();
-            orderList.forEach(orderListElem => {
+            this.clear();
+            let queryString=Utilities.createFilterQueryString(filters);
+            console.log(queryString);
+            queryString.append('pageNumber', this.pagingParams.pageNumber.toString());
+            queryString.append('pageSize', this.pagingParams.pageSize.toString());
+            const result = await agent.Order.getList(queryString);
+            result.data.forEach(orderListElem => {
                 this.setOrder(orderListElem);
-                console.log(orderList);
-                this.setLoading(false);
             })
+            console.log(this.orderList);
+            this.setPagination(result.pagination);
+            this.setLoading(false);
         }catch (error) {
             console.log(error);
             this.setLoading(false);
@@ -51,6 +66,27 @@ export default class OrderStore {
             return null;
         }
     }
+    getOrderSummary = async (predicate: string) =>{
+        this.setLoading(true);
+        try{
+            const orderSummary = await agent.Order.orderSummary(predicate);
+            runInAction(()=>{
+                console.log("To ja order summary")
+                orderSummary.productionDate=new Date(orderSummary.productionDate);
+                orderSummary.shipmentDate=new Date(orderSummary.shipmentDate);
+                orderSummary.editDate=new Date(orderSummary.editDate);
+                console.log(orderSummary);
+                this.orderSummary=orderSummary;
+                
+            })
+        }catch(error){
+            console.log(error);
+        }finally{
+            console.log(this.orderSummary);
+            this.setLoading(false);
+        }
+    }
+
     handlePositionToRemove = (id: number, add: boolean) => {
         if (add) {
             this.orderPositionsToRemove.push(id);
@@ -101,6 +137,12 @@ export default class OrderStore {
 
     setLoading(isLoaded: boolean) {
         this.loading = isLoaded;
+    }
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
     }
     private setAbleToDelete(isAble: boolean) {
         this.ableToDeletePositions = isAble;

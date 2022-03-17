@@ -10,20 +10,23 @@ export default observer(function NavBar() {
         <Menu inverted fixed='top'>
             <Container>
                 <Menu.Item as={NavLink} to='/' header>
-                    Reactivities
+                    Home Page
                 </Menu.Item>
                 {isLoggedIn &&
                     <>
                         <Dropdown item text='Orders'>
                             <Dropdown.Menu>
-                                <Dropdown.Item as={NavLink} to='/orders' name="ListOrders">List Orders</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/orders' name="ListOrders">Orders List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/orders/form' name="OrderForm">Create Order</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-                        <Menu.Item as={NavLink} to='/errors' name='Errors' />
-                        <Menu.Item>
-                            <Button as={NavLink} to='/createActivity' positive content='Create Activity' />
-                        </Menu.Item>
+                        <Dropdown item text='Articles'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={NavLink} to='/articles' name="ListArticles">Articles List</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/articles/form' name="ArticleForm">Create Article</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                         <Menu.Item position='right'>
                             <Dropdown pointing='top left' text={user?.displayName}>
                                 <Dropdown.Menu>

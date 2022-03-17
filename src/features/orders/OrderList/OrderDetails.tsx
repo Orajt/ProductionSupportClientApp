@@ -25,9 +25,7 @@ export default observer(function OrderDetails() {
         }
     }, [id, getOrderDetails]);
 
-    function handleEdit(pos: OrderPositionFormValues) {
-
-    }
+    function handleEdit(pos: OrderPositionFormValues) {}
     function deleteOrder(){
         axios.delete<void>(`order/${id}`,{}).then((response)=>{
             if(response.status===200){
@@ -69,6 +67,7 @@ export default observer(function OrderDetails() {
                 </Grid.Row>
                 <Grid.Row>
                     <Button onClick={() => navigate(`/orders/form/${orderDetails.id}`)}>Edit</Button>
+                    <Button onClick={() => navigate(`/orders/summary/${orderDetails.id}`)}>OrderSummary</Button>
                     {!wantDeleteOrder && <Button color="red" onClick={() => setDeleteOrder(true)}>Delete order</Button>}
                     {wantDeleteOrder && 
                     <React.Fragment>

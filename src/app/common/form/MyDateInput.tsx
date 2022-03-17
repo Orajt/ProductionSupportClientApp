@@ -7,6 +7,7 @@ interface Iprops extends Partial<ReactDatePickerProps>{
     styles?: any;
     validateOnChaange: boolean;
     label?: string;
+    validateFilter?:(x:Date | null)=>void;
 
 }
 export default function MyDateInput(props: Iprops) {
@@ -18,7 +19,10 @@ export default function MyDateInput(props: Iprops) {
                 {...field}
                 {...props}
                 selected={(field.value && new Date(field.value)) || null}
-                onChange={value => helpers.setValue(value, props.validateOnChaange)}
+                onChange={value => {
+                    helpers.setValue(value, props.validateOnChaange);
+                    if(props.validateFilter) props.validateFilter(value)
+                }}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>

@@ -51,4 +51,24 @@ body {
 .width100p{
   width: 100% !important;
 }
+.width80p{
+  width: 80% !important;
+  display: inline-block;
+}
+.width20p{
+  width: 20% !important;
+  display: inline-block;
+}
+.clearBoth{
+  clear: both;
+}
+.redBorder{
+  border: 2px solid red;
+}
+.fontSizeMedium{
+  font-size:medium;
+}
+.displayBlock{
+  display: block;
+}
 /*end home page styles*/

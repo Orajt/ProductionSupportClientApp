@@ -11,6 +11,8 @@ import NotFound from '../../features/errors/NotFound';
 import OrderList from '../../features/orders/OrderList/OrderList';
 import OrderDetails from '../../features/orders/OrderList/OrderDetails';
 import OrderForm from '../../features/orders/form/OrderForm';
+import OrderSummary from '../../features/orders/orderSummary/OrderSummary';
+import ArticleList from '../../features/articles/ArticleList';
 
 function App() {
   const location=useLocation();
@@ -32,10 +34,13 @@ function App() {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path="/*" element={<AfterSuccessLogin />}>
+          <Route path="home" element={<AfterSuccessLogin />} />
           <Route path="orders" element={<OrderList />} />
           <Route path="orders/:id" element={<OrderDetails />} />
           <Route key={location.key} path="orders/form" element={<OrderForm />} />
           <Route key={location.key} path="orders/form/:id" element={<OrderForm />} />
+          <Route path="orders/summary/:predicate" element={<OrderSummary />} />
+          <Route path="articles" element={<ArticleList />} />
           <Route path="notFound" element={<NotFound />} />
         </Route>
       </Routes>

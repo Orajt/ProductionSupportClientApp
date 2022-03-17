@@ -66,7 +66,7 @@ export default observer(function OrderForm() {
             console.log("co jest kurwa");
             axios.put<void>(`/order/${id}`, order).then((response)=>{
                 if(response.status===200){
-                    navigate(`/orders/${order.id}`);
+                    navigate(`/orders/summary/${order.id}`);
                     return;
                 }
             })
@@ -74,7 +74,7 @@ export default observer(function OrderForm() {
         if(!editMode){ 
             axios.post<void>(`/order/`, order).then((response)=>{
                 if(response.status===200){
-                    navigate(`/orders`);
+                    navigate(`/orders/summary/${order.name}`);
                     return;
                 }
             })

@@ -1,10 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { OrderDetails, OrderFormValues, OrderListElem} from '../../models/orders';
+import { OrderDetails, OrderFormValues, OrderListElem, OrderSummary} from '../../models/orders';
 import { ReactSelectInt } from '../../models/reactSelectInt';
 import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
+import { PaginatedResult } from '../../models/pagination';
+import { Article } from '../../models/article';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -21,12 +23,12 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    if (process.env.NODE_ENV === 'development') await sleep(1000);
-    // const pagination = response.headers['pagination'];
-    // if (pagination) {
-    //     response.data = new PaginatedResult(response.data, JSON.parse(pagination));
-    //     return response as AxiosResponse<PaginatedResult<any>>
-    // }
+    // if (process.env.NODE_ENV === 'development') await sleep(1000);
+    const pagination = response.headers['pagination'];
+    if (pagination) {
+        response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+        return response as AxiosResponse<PaginatedResult<any>>
+    }
     return response;
 }, (error: AxiosError) => {
     const { data, status, config, headers } = error.response!;
@@ -36,7 +38,6 @@ axios.interceptors.response.use(async response => {
                 history.push('/not-found');
             }
             if (data.errors) {
-                console.log("Jestem z data errors");
                 const modalStateErrors = [];
                 for (const key in data.errors) {
                     if (data.errors[key]) {
@@ -80,17 +81,20 @@ const Account = {
     register: (user: UserFormValues) => requests.post<User>('/account/register', user)
 }
 const Order={
-    getList:()=>requests.get<OrderListElem[]>('/order'),
+    getList:(params: URLSearchParams)=>axios.get<PaginatedResult<OrderListElem[]>>(`/order`,{params}).then(responseBody),
     details:(id: number)=>requests.get<OrderDetails>(`/order/${id}`),
     create:(order: OrderFormValues) => requests.post<void>(`/order`, order),
     edit:(order: OrderFormValues, id: number)=>requests.put<void>(`/order/${id}`,order),
     checkName:(name: string)=>requests.get<number>(`/order/${name}/CHECK`),
-    delete:(id: number)=>requests.del<void>(`order/${id}`,{})
+    delete:(id: number)=>requests.del<void>(`order/${id}`,{}),
+    orderSummary:(predicate: string)=>requests.get<OrderSummary>(`/order/summary/order/${predicate}`)
     
 }
 const Articles={
     getReactSelect:(id: number, predicate: string)=>requests.get<ReactSelectInt[]>(`/article/${id}/${predicate}`),
-    getArticleTypesRS:()=>requests.get<ReactSelectInt[]>('/articleType')
+    getArticleTypesRS:()=>requests.get<ReactSelectInt[]>('/articleType'),
+    getList:(params: URLSearchParams)=>axios.get<PaginatedResult<Article[]>>(`/article`,{params}).then(responseBody),
+
 }
 const OrderPosition={
     deleteOrderPositions: (id: number, positions: number[])=>requests.post<void>(`/orderPosition/${id}`, {positionsToRemove: positions}) 
