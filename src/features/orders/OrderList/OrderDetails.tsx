@@ -66,7 +66,7 @@ export default observer(function OrderDetails() {
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Button onClick={() => navigate(`/orders/form/${orderDetails.id}`)}>Edit</Button>
+                    <Button color="teal" onClick={() => navigate(`/orders/form/${orderDetails.id}`)}>Edit</Button>
                     <Button onClick={() => navigate(`/orders/summary/${orderDetails.id}`)}>OrderSummary</Button>
                     {!wantDeleteOrder && <Button color="red" onClick={() => setDeleteOrder(true)}>Delete order</Button>}
                     {wantDeleteOrder && 

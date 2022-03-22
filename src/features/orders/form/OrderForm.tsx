@@ -7,7 +7,6 @@ import Select from "react-select"
 import { Button, Grid, GridColumn, Header, Segment } from "semantic-ui-react";
 import { Utilities } from "../../../app/common/utilities/Utilities";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import ModalStore from "../../../app/stores/modalStore";
 import { useStore } from "../../../app/stores/store";
 import { OrderDetails, OrderFormValues,OrderPositionFormValues } from "../../../models/orders";
 import NotFound from "../../errors/NotFound";
@@ -47,13 +46,13 @@ export default observer(function OrderForm() {
         if (id && !isNaN(parseInt(id))) {
             getOrderDetails(parseInt(id)).then((value) => setOrder(value as OrderFormValues))
                 .then(() => getDeliveryPlacesRS("DEALER"))
-                .then(() => getArticleTypesRS())
+                .then(() => getArticleTypesRS(false))
                 .finally(() => { setTitle(`Edit order ${order.name}`); setEditMode(true); setLoading(false); });
 
             setSecondStep(true);
         }
         if (!id) {
-            getDeliveryPlacesRS("DEALER").then(() => getArticleTypesRS()).then(() => setLoading(false))
+            getDeliveryPlacesRS("DEALER").then(() => getArticleTypesRS(false)).then(() => setLoading(false))
         }
         return clear();
 
@@ -63,7 +62,6 @@ export default observer(function OrderForm() {
     function handleFormSubmit(){
         setLoading(true)
         if(editMode){
-            console.log("co jest kurwa");
             axios.put<void>(`/order/${id}`, order).then((response)=>{
                 if(response.status===200){
                     navigate(`/orders/summary/${order.id}`);

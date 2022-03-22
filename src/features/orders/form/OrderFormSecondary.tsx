@@ -46,7 +46,6 @@ export default observer(function OrderFormSecondary({articleTypeId, handleFormSu
                 onSubmit={values => handleFormSubmit(values)}>
                 {({ handleSubmit, isValid, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        
                         <MySelectInput label="Select article" validateOnChaange={true} options={articlesRS} 
                         placeholder='Choose article' name='articleRS' defaultSelected={0}/>
                         <MyTextInput name="setId" label="Set" placeholder="Type other than 0 if want to create set"/>

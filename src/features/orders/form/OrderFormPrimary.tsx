@@ -4,7 +4,7 @@ import { Button, Header } from "semantic-ui-react";
 import MyDateInput from "../../../app/common/form/MyDateInput";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { OrderFormValues } from "../../../models/orders";
-import { ReactSelectInt } from "../../../models/reactSelectInt";
+import { ReactSelectInt } from "../../../models/reactSelect";
 import * as Yup from 'yup';
 import { observer } from "mobx-react-lite";
 import agent from "../../../app/api/agent";

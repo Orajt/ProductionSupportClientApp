@@ -1,5 +1,5 @@
 import OrderDetails from "../features/orders/OrderList/OrderDetails";
-import { ReactSelectInt } from "./reactSelectInt";
+import { ReactSelectInt } from "./reactSelect";
 
 export interface OrderListElem {
     id: number;
