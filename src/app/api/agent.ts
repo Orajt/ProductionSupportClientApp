@@ -2,11 +2,12 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { OrderDetails, OrderFormValues, OrderListElem, OrderSummary} from '../../models/orders';
-import { ReactSelectInt } from '../../models/reactSelectInt';
+import { ReactSelectInt} from '../../models/reactSelect';
 import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { PaginatedResult } from '../../models/pagination';
-import { Article } from '../../models/article';
+import { Article, ArticleDetails } from '../../models/article';
+import { StuffListToSelect } from '../../models/stuff';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -94,7 +95,9 @@ const Articles={
     getReactSelect:(id: number, predicate: string)=>requests.get<ReactSelectInt[]>(`/article/${id}/${predicate}`),
     getArticleTypesRS:()=>requests.get<ReactSelectInt[]>('/articleType'),
     getList:(params: URLSearchParams)=>axios.get<PaginatedResult<Article[]>>(`/article`,{params}).then(responseBody),
-
+    details:(id: string)=>requests.get<ArticleDetails>(`/article/${id}`),
+    checkNameOrGetId:(params: URLSearchParams, articleName: string)=>axios.get<number>(`/article/check/name/${articleName}`, {params}).then(responseBody),
+    delete: (id: number)=>requests.del<void>(`article/${id}`,{})
 }
 const OrderPosition={
     deleteOrderPositions: (id: number, positions: number[])=>requests.post<void>(`/orderPosition/${id}`, {positionsToRemove: positions}) 
@@ -102,6 +105,13 @@ const OrderPosition={
 const DeliveryPlace={
     getReactSelect: (predicate:string)=>requests.get<ReactSelectInt[]>(`/deliveryPlace/reactSelect?predicate=${predicate}`) 
 }
+const Families ={
+    getReactSelect: () =>requests.get<ReactSelectInt[]>(`/familly/list/reactSelect`) 
+}
+const Stuffs ={
+    getReactSelect: () =>requests.get<StuffListToSelect[]>(`/stuff/list/reactSelect`) 
+}
+
 
 
 const agent = {
@@ -109,7 +119,9 @@ const agent = {
     Order,
     OrderPosition,
     Articles,
-    DeliveryPlace
+    DeliveryPlace,
+    Families,
+    Stuffs
 }
 
 export default agent;

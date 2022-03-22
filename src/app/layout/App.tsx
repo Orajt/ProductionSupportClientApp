@@ -13,6 +13,8 @@ import OrderDetails from '../../features/orders/OrderList/OrderDetails';
 import OrderForm from '../../features/orders/form/OrderForm';
 import OrderSummary from '../../features/orders/orderSummary/OrderSummary';
 import ArticleList from '../../features/articles/ArticleList';
+import ArticleDetails from '../../features/articles/ArticleDetails';
+import ArticleForm from '../../features/articles/form/ArticleForm';
 
 function App() {
   const location=useLocation();
@@ -35,19 +37,23 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path="/*" element={<AfterSuccessLogin />}>
           <Route path="home" element={<AfterSuccessLogin />} />
+          {/* Orders */}
           <Route path="orders" element={<OrderList />} />
           <Route path="orders/:id" element={<OrderDetails />} />
           <Route key={location.key} path="orders/form" element={<OrderForm />} />
           <Route key={location.key} path="orders/form/:id" element={<OrderForm />} />
           <Route path="orders/summary/:predicate" element={<OrderSummary />} />
+          {/* Articles */}
           <Route path="articles" element={<ArticleList />} />
+          <Route path="articles/:id" element={<ArticleDetails />} />
+          <Route path="articles/form" element={<ArticleForm />} />
+          <Route path="articles/form/:id" element={<ArticleForm />} />
+
           <Route path="notFound" element={<NotFound />} />
         </Route>
       </Routes>
-
-
+ 
     </>
   );
 }
-
 export default observer(App);

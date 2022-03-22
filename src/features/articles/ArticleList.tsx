@@ -14,13 +14,14 @@ import { useStore } from "../../app/stores/store";
 export default observer(function ArticleList() {
 
     const { articleStore} = useStore()
-    const { getArticles, articleList, loading, clear, pagingParams, setPagingParams, pagination} = articleStore;
+    const { getArticles, articleList, clear, pagingParams, setPagingParams, pagination} = articleStore;
+    const [loading, setLoading]=useState(true);
     let navigate = useNavigate();
     const [filters, setFilters]=useState<FilterResult[]>([]);
     useEffect(() => {
-        getArticles(filters);
+        getArticles(filters).then(()=>setLoading(false));
         return(()=>{
-            clear()
+            clear();
         })
     }, [getArticles, setPagingParams, clear]);
 

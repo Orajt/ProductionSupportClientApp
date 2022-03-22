@@ -62,6 +62,9 @@ body {
 .clearBoth{
   clear: both;
 }
+.fontSizeXXLarge{
+  font-size:xx-large !important;
+}
 .redBorder{
   border: 2px solid red;
 }
@@ -70,5 +73,8 @@ body {
 }
 .displayBlock{
   display: block;
+}
+.rowMargin{
+  margin-top: 30px;
 }
 /*end home page styles*/
