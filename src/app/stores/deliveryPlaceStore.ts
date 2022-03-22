@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction} from "mobx";
-import { ReactSelectInt } from "../../models/reactSelectInt";
+import { ReactSelectInt } from "../../models/reactSelect";
 import agent from "../api/agent";
 
 export default class DeliveryPlaceStore {

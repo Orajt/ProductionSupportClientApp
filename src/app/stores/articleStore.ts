@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction, toJS} from "mobx";
-import { Article } from "../../models/article";
+import { Article, ArticleDetails } from "../../models/article";
 import { Pagination, PagingParams } from "../../models/pagination";
-import { ReactSelectInt } from "../../models/reactSelectInt";
+import { ReactSelectInt } from "../../models/reactSelect";
 import agent from "../api/agent";
 import { Utilities } from "../common/utilities/Utilities";
 import { FilterResult } from "../models/filter";
@@ -11,6 +11,7 @@ export default class ArticleStore {
         makeAutoObservable(this);
     }
     loading=true;
+    articleDetails: ArticleDetails | null = null;
     articlesRS = [] as ReactSelectInt[];
     articleTypesRS = [] as ReactSelectInt[];
     articleList = [] as Article[];
@@ -18,6 +19,7 @@ export default class ArticleStore {
     pagingParams=new PagingParams(1,20);
 
     clear = () => {
+        console.log("im clearing");
         this.loading=true;
         this.articleList = [];
         this.articlesRS=[];
@@ -38,10 +40,12 @@ export default class ArticleStore {
             console.log(error);
         }
     }
-    getArticleTypesRS = async()=>{
+    getArticleTypesRS = async(noSet: boolean)=>{
         try{
             let articleTypes = await agent.Articles.getArticleTypesRS();
             runInAction(()=>{
+                if(noSet)
+                    articleTypes=articleTypes.filter(p=>p.value!==5);
                 this.articleTypesRS=articleTypes;
             })
         }catch(error){
@@ -53,7 +57,6 @@ export default class ArticleStore {
             this.loading = true;
             this.articleList=[];
             let queryString=Utilities.createFilterQueryString(filters);
-            console.log(queryString);
             queryString.append('pageNumber', this.pagingParams.pageNumber.toString());
             queryString.append('pageSize', this.pagingParams.pageSize.toString());
             const result = await agent.Articles.getList(queryString);
@@ -70,6 +73,26 @@ export default class ArticleStore {
             console.log(error);
         }finally{
             this.setLoading(false);
+        }
+    }
+    getArticleDetails = async(id: string)=>{
+        try{
+            this.loading = true;
+            let article = await agent.Articles.details(id);
+            console.log(article);
+            runInAction(()=>{
+                if(article.nameWithoutFamilly===null)
+                    article.nameWithoutFamilly="";
+                article.editDate=new Date(article.editDate!);
+                article.createDate=new Date(article.createDate!);
+                this.articleDetails=article;
+            })
+
+        }catch(error){
+            console.log(error);
+        }finally{
+            this.setLoading(false);
+            return this.articleDetails;
         }
     }
     setPagingParams = (pagingParams: PagingParams) => {

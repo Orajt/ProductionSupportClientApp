@@ -7,6 +7,7 @@ interface Props {
     name: string;
     type?: string;
     label?: string;
+    isDisabled?: Boolean;
 }
 
 export default function MyTextInput(props: Props) {

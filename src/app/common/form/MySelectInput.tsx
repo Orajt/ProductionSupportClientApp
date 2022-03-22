@@ -2,7 +2,7 @@ import { useField } from 'formik';
 import React, { useState } from 'react';
 import { Form, Label} from 'semantic-ui-react';
 import Select from 'react-select'
-import { ReactSelectInt } from '../../../models/reactSelectInt';
+import { ReactSelectInt } from '../../../models/reactSelect';
 
 interface Props {
     placeholder: string;
@@ -11,6 +11,7 @@ interface Props {
     validateOnChaange: boolean;
     label?: string;
     defaultSelected: number;
+    disabled?: boolean;
 }
 
 export default function MySelectInput(props: Props) {
@@ -31,6 +32,7 @@ export default function MySelectInput(props: Props) {
                 }}
                 onBlur={() => helpers.setTouched(true)}
                 placeholder={props.placeholder}
+                isDisabled={props.disabled}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
