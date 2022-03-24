@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import ArticleStore from "./articleStore";
 import CommonStore from "./commonStore";
+import CompanyStore from "./companyStore";
 import DeliveryPlaceStore from "./deliveryPlaceStore";
 import FamillyStore from "./famillyStore";
 import ModalStore from "./modalStore";
@@ -17,6 +18,7 @@ interface Store {
     deliveryPlaceStore: DeliveryPlaceStore;
     famillyStore: FamillyStore;
     stuffStore: StuffStore;
+    companyStore: CompanyStore;
 }
 
 export const store: Store = {
@@ -27,7 +29,8 @@ export const store: Store = {
     articleStore: new ArticleStore(),
     deliveryPlaceStore: new DeliveryPlaceStore(),
     famillyStore: new FamillyStore(),
-    stuffStore: new StuffStore()
+    stuffStore: new StuffStore(),
+    companyStore: new CompanyStore()
 }
 
 export const StoreContext = createContext(store);

@@ -7,7 +7,9 @@ import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { PaginatedResult } from '../../models/pagination';
 import { Article, ArticleDetails } from '../../models/article';
-import { StuffListToSelect } from '../../models/stuff';
+import {  StuffFormValues, StuffListItem, StuffListToSelect } from '../../models/stuff';
+import { CompanyDetails, CompanyFormValues, CompanyListItem } from '../../models/company';
+import { DeliveryPlaceDetails, DeliveryPlaceFormValues, DeliveryPlaceListItem } from '../../models/deliveryPlace';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -103,13 +105,30 @@ const OrderPosition={
     deleteOrderPositions: (id: number, positions: number[])=>requests.post<void>(`/orderPosition/${id}`, {positionsToRemove: positions}) 
 }
 const DeliveryPlace={
-    getReactSelect: (predicate:string)=>requests.get<ReactSelectInt[]>(`/deliveryPlace/reactSelect?predicate=${predicate}`) 
+    getReactSelect: (predicate:string)=>requests.get<ReactSelectInt[]>(`/deliveryPlace/list/reactSelect?predicate=${predicate}`),
+    list: () => requests.get<DeliveryPlaceListItem[]>(`/deliveryPlace`),
+    details: (id: string)=>requests.get<DeliveryPlaceDetails>(`/deliveryPlace/${id}`),
+    create:(deliveryPlace: DeliveryPlaceFormValues) => requests.post<void>(`/deliveryPlace`, deliveryPlace),
+    edit:(deliveryPlace: DeliveryPlaceFormValues) => requests.put<void>(`/deliveryPlace/${deliveryPlace.id}`, deliveryPlace)
+
 }
 const Families ={
     getReactSelect: () =>requests.get<ReactSelectInt[]>(`/familly/list/reactSelect`) 
 }
 const Stuffs ={
-    getReactSelect: () =>requests.get<StuffListToSelect[]>(`/stuff/list/reactSelect`) 
+    getReactSelect: () =>requests.get<StuffListToSelect[]>(`/stuff/list/reactSelect`),
+    list: () => requests.get<StuffListItem[]>(`/stuff`),
+    details: (id: number)=>requests.get<StuffListItem>(`/stuff/${id}`),
+    create:(stuff: StuffFormValues) => requests.post<void>(`/company`, stuff),
+    edit:(stuff: StuffFormValues) => requests.put<void>(`/company/${stuff.id}`, stuff), 
+}
+const Companies={
+    list: () => requests.get<CompanyListItem[]>(`/company`),
+    details: (id: string)=>requests.get<CompanyDetails>(`/company/${id}`),
+    listReactSelect: (predicate: string)=>requests.get<ReactSelectInt[]>(`/company/reactSelect/${predicate}`),
+    create:(company: CompanyFormValues) => requests.post<void>(`/company`, company),
+    edit:(company: CompanyFormValues) => requests.put<void>(`/company/${company.id}`, company),
+    
 }
 
 
@@ -121,7 +140,8 @@ const agent = {
     Articles,
     DeliveryPlace,
     Families,
-    Stuffs
+    Stuffs,
+    Companies
 }
 
 export default agent;

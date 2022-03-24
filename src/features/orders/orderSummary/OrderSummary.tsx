@@ -1,12 +1,12 @@
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Grid, Header, Table } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import NotFound from "../../errors/NotFound";
-import OrderSummaryClientTb from "./OrderSummaryClientTb";
+import OrderSummaryClientRow from "./OrderSummaryClientRow";
 
 export default observer(function OrderSummary() {
 
@@ -48,10 +48,26 @@ export default observer(function OrderSummary() {
                         </Table>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row><Button positive onClick={()=>navigate(`/orders/form/${orderSummary.id}`)}>Edit</Button></Grid.Row>
-                {orderSummary!.positions.map((orderClient) => (
-                    <OrderSummaryClientTb client={orderClient} key={orderClient.client}></OrderSummaryClientTb>
-                ))}
+                <Grid.Row><Button positive onClick={() => navigate(`/orders/form/${orderSummary.id}`)}>Edit</Button></Grid.Row>
+                <Grid.Row>
+                    <Table celled>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>PosId</Table.HeaderCell>
+                                <Table.HeaderCell>Lp</Table.HeaderCell>
+                                <Table.HeaderCell>Article Name</Table.HeaderCell>
+                                <Table.HeaderCell>Quanity</Table.HeaderCell>
+                                <Table.HeaderCell>Realization</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {orderSummary.positions.map((client) => (
+                                <OrderSummaryClientRow key={client.client} client={client}></OrderSummaryClientRow>
+                            ))}
+                                    
+                        </Table.Body>
+                    </Table>
+                </Grid.Row>
             </Grid>
         </>
     )

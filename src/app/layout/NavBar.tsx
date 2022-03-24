@@ -24,9 +24,27 @@ export default observer(function NavBar() {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={NavLink} to='/articles' name="ListArticles">Articles List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articles/form' name="ArticleForm">Create Article</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/articles/articleType/form' name="ArticleTypeForm">Assign stuff to Article Type</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-
+                        <Dropdown item text='Companies'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={NavLink} to='/companies' name="ListCompanies">Companies List</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/companies/form' name="CompanyForm">Create Company</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown item text='Delivery places'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={NavLink} to='/deliveryPlaces' name="ListDeliveryPlaces">Delivery places List</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/deliveryPlaces/form' name="DeliveryPlaceForm">Create delivery place</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown item text='Stuffs'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={NavLink} to='/stuffs' name="ListStuffs">Stuff list</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/stuffs/form' name="StuffForm">Create stuff</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                         <Menu.Item position='right'>
                             <Dropdown pointing='top left' text={user?.displayName}>
                                 <Dropdown.Menu>

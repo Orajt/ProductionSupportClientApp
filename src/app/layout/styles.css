@@ -77,4 +77,20 @@ body {
 .rowMargin{
   margin-top: 30px;
 }
+.backgroundLightGrey
+{
+  background-color: #E0E0E0;
+}
+.backgroundLightBlue
+{
+  background-color: #CCE5FF;
+}
+input[type='checkbox'] {
+  width:30px;
+  height:30px;
+  background:white;
+  border-radius:5px;
+  border:2px solid #555;
+}
+
 /*end home page styles*/

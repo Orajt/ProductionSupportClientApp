@@ -14,11 +14,13 @@ import { useStore } from "../../../app/stores/store";
 export default observer(function OrderList() {
 
     const { orderStore } = useStore()
-    const { getOrderList, orderList, loading, clear, pagingParams, setPagingParams, pagination} = orderStore;
+    const { getOrderList, orderList, clear, pagingParams, setPagingParams, pagination} = orderStore;
     let navigate = useNavigate();
     const [filters, setFilters]=useState<FilterResult[]>([]);
+    const [loading, setLoading]=useState(true);
     useEffect(() => {
-        getOrderList(filters);
+        setLoading(true);
+        getOrderList(filters).then(()=>setLoading(false));
         return(()=>{
             clear()
         })
@@ -48,7 +50,10 @@ export default observer(function OrderList() {
         <>
             <Header as="h1" >Order list</Header>
             <Button positive onClick={()=>navigate('/orders/form')}>Create new order</Button>
-            <Button onClick={()=>getOrderList(filters)} content="Enable filters"/>
+            <Button onClick={()=>{
+                setLoading(true);
+                getOrderList(filters).then(()=>setLoading(false));
+                }} content="Enable filters"/>
             <Button onClick={()=>clearAllFilters()} content="Clear filters"/>
             <div className="fontSizeMedium boldFont">Actual filters: {filters.map((filter)=>(
                 `${Utilities.getFilterDescription(filter)}`

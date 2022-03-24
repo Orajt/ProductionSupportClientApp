@@ -1,22 +1,18 @@
 import { makeAutoObservable, runInAction} from "mobx";
-import { Pagination, PagingParams } from "../../models/pagination";
-import { ReactSelectInt } from "../../models/reactSelect";
-import { StuffListToSelect } from "../../models/stuff";
+import { StuffListItem, StuffListToSelect } from "../../models/stuff";
 import agent from "../api/agent";
 export default class StuffStore {
     constructor() {
         makeAutoObservable(this);
     }
-    loading=true;
     stuffRS: StuffListToSelect[] | null=null;
-    pagination: Pagination | null = null;
-    pagingParams=new PagingParams(1,20);
+    stuffDetails: StuffListItem | null = null;
+    stuffList: StuffListItem[] | null =null;
 
     clear = () => {
-        this.loading=true;
         this.stuffRS=[];
-        this.pagination=null;
-        this.pagingParams=new PagingParams();
+        this.stuffDetails=null;
+        this.stuffList=[];
     }
 
     getStuffsListToSelect = async()=>{
@@ -31,15 +27,28 @@ export default class StuffStore {
             console.log(error);
         }
     }
+    getStuffDetails = async(id: number)=>{
+        try{
+            const stuffDetails = await agent.Stuffs.details(id);
+            runInAction(()=>{
+                this.stuffDetails=stuffDetails;
+            })
+            return stuffDetails;
+        }catch(error){
+            console.log(error);
+        }
+    }
+    getStuffList = async()=>{
+        try{
+            const stuffList = await agent.Stuffs.list();
+            runInAction(()=>{
+                this.stuffList=stuffList;
+            })
+        }catch(error){
+            console.log(error);
+        }
+    }
 
-    setPagingParams = (pagingParams: PagingParams) => {
-        this.pagingParams = pagingParams;
-    }
-    setPagination = (pagination: Pagination) => {
-        this.pagination = pagination;
-    }
-    setLoading(isLoaded: boolean) {
-        this.loading = isLoaded;
-    }
+
        
 }

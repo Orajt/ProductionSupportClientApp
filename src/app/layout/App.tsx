@@ -15,6 +15,13 @@ import OrderSummary from '../../features/orders/orderSummary/OrderSummary';
 import ArticleList from '../../features/articles/ArticleList';
 import ArticleDetails from '../../features/articles/ArticleDetails';
 import ArticleForm from '../../features/articles/form/ArticleForm';
+import CompanyForm from '../../features/companies/form/CompanyForm';
+import CompaniesList from '../../features/companies/CompaniesList';
+import CompanyDetials from '../../features/companies/CompanyDetials';
+import DeliveryPlacesList from '../../features/deliveryPlaces/DeliveryPlacesList';
+import DeliveryPlaceForm from '../../features/deliveryPlaces/form/DeliveryPlaceForm';
+import StuffList from '../../features/stuffs/StuffList';
+import StuffForm from '../../features/stuffs/Form/StuffForm';
 
 function App() {
   const location=useLocation();
@@ -48,6 +55,21 @@ function App() {
           <Route path="articles/:id" element={<ArticleDetails />} />
           <Route path="articles/form" element={<ArticleForm />} />
           <Route path="articles/form/:id" element={<ArticleForm />} />
+          {/* Companies */}
+          <Route path="companies" element={<CompaniesList />} />
+          <Route path="companies/:id" element={<CompanyDetials />} />
+          <Route path="companies/form" element={<CompanyForm />} />
+          <Route path="companies/form/:id" element={<CompanyForm />} />
+
+          {/* Delivery Places */}
+          <Route path="deliveryPlaces" element={<DeliveryPlacesList />} />
+          <Route path="deliveryPlaces/form" element={<DeliveryPlaceForm />} />
+          <Route path="deliveryPlaces/form/:id" element={<DeliveryPlaceForm />} />
+
+           {/* Stuffs*/}
+          <Route path="stuffs" element={<StuffList />} />
+          <Route key={1} path="stuffs/form" element={<StuffForm />} />
+          <Route key={2} path="stuffs/form/:id" element={<StuffForm />} />
 
           <Route path="notFound" element={<NotFound />} />
         </Route>
