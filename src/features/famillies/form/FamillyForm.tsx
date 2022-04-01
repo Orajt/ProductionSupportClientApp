@@ -8,24 +8,23 @@ import { useStore } from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { StuffFormValues } from "../../../models/stuff";
+import { FamillyFormValues } from "../../../models/familly";
 
 
-export default observer(function StuffForm() {
+export default observer(function FamillyForm() {
 
     ////////////////////Validation////////////////////////////////////
     const validationSchema = Yup.object({
         name: Yup.string().min(3).required(),
     })
     ///////////////////////STORES//////////////////////////////////
-    const { stuffStore, articleStore } = useStore();
-    const { getStuffDetails } = stuffStore;
-    const { articleTypesRS, getArticleTypesRS } = articleStore;
+    const { famillyStore } = useStore();
+    const { getFamiliesRS, familiesRS } = famillyStore;
 
     ////////////////LOCAL STATE//////////////////////////////////////
     const [loading, setLoading] = useState(true);
-    const [initialValues, setInitialFormValues] = useState(new StuffFormValues());
-    const [title, setTitle] = useState("Create stuff")
+    const [initialValues, setInitialFormValues] = useState(new FamillyFormValues());
+    const [title, setTitle] = useState("Create familly")
     const [editMode, setEditMode] = useState(false);
 
     ////////////////ROUTE PARAMS//////////////////////////////////////
@@ -33,34 +32,43 @@ export default observer(function StuffForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoading(true);
         if (id && !isNaN(parseInt(id))) {
-            getStuffDetails(parseInt(id)).then((value) => {
-                setInitialFormValues(value as StuffFormValues)
+            setLoading(true);
+            getFamiliesRS().then(() => {
+                let famillyToEdit=familiesRS.find(p=>p.value===parseInt(id));
+                if(famillyToEdit){
+                    let formValues={} as FamillyFormValues;
+                    formValues.id=famillyToEdit.value;
+                    formValues.name=famillyToEdit.label;
+                    setInitialFormValues(formValues);
+                }
+               
             })
             .finally(() => {
-                setTitle("Edit stuff");
+                setLoading(false);
+                setTitle("Edit familly");
                 setEditMode(true);
             });
+        }else{
+            setLoading(false);
         }
-        getArticleTypesRS(true).then(()=> setLoading(false));
        
-    }, [getArticleTypesRS, getStuffDetails, id]);
+    }, [getFamiliesRS, id]);
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
-    function handleFormSubmit(stuff: StuffFormValues) {
+    function handleFormSubmit(familly: FamillyFormValues) {
         if (editMode) {
-            axios.put<void>(`/stuff/${id}`, stuff).then((response) => {
+            axios.put<void>(`/familly/${id}`, familly).then((response) => {
                 if (response.status === 200) {
-                    navigate(`/stuffs`);
+                    navigate(`/famillies`);
                     return;
                 }
             })
         }
         if (!editMode) {
-            axios.post<void>(`/stuff/`, stuff).then((response) => {
+            axios.post<void>(`/familly/`, familly).then((response) => {
                 if (response.status === 200) {
-                    navigate(`/stuffs`);
+                    navigate(`/famillies`);
                     return;
                 }
             })

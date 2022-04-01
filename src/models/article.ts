@@ -1,4 +1,5 @@
 import { ReactSelectInt } from "./reactSelect";
+import { StuffListItem, StuffListToSelect } from "./stuff";
 
 export interface Article{
     id: number;
@@ -76,4 +77,15 @@ export class ArticlePositionFormValues{
     childArticleHasChild: boolean=false;
     articleRS?: ReactSelectInt | null = null;
     quanity: number=0;
+}
+
+export interface ArticleTypeDetails {
+    id: number;
+    name: string;
+    stuffs: ReactSelectInt[];
+}
+export class AssignArticleFormValues{
+    id: number=0;
+    name: string="";
+    stuffs: ReactSelectInt[]=[];
 }

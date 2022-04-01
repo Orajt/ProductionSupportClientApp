@@ -1,29 +1,30 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Header, Icon, Table } from "semantic-ui-react";
+import { Button, Header,Table } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/store";
 import NotFound from "../errors/NotFound";
 
-export default observer(function ArticleTypeList() {
+export default observer(function FamiliesList() {
 
-    const { articleStore } = useStore();
-    const {getArticleTypesRS, articleTypesRS} = articleStore;
+    const { famillyStore } = useStore();
+    const { getFamiliesRS, familiesRS} = famillyStore;
 
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         setLoading(true);
-        getArticleTypesRS(false).then(() => setLoading(false));
-    }, [getArticleTypesRS]);
+        getFamiliesRS().then(() => setLoading(false));
+    }, [getFamiliesRS]);
 
     if (loading) return <LoadingComponent content="loading"></LoadingComponent>;
-    if (articleTypesRS == null) return <NotFound></NotFound>
+    if (familiesRS == null) return <NotFound></NotFound>
 
     return (
         <>
-            <Header as="h1" >Article types list</Header>
+            <Header as="h1" >Families list</Header>
+            <Button positive onClick={() => navigate('/famillies/form')}>Create new familly</Button>
             <Table striped>
                 <Table.Header>
                     <Table.Row>
@@ -33,11 +34,11 @@ export default observer(function ArticleTypeList() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {articleTypesRS.map((articleType) => (
-                        <Table.Row key={articleType.value}>
-                            <Table.Cell>{articleType.value}</Table.Cell>
-                            <Table.Cell>{articleType.label}</Table.Cell>
-                            <Table.Cell><Button onClick={()=>navigate(`/articleTypes/assign/${articleType.value}`)}>Manage stuffs</Button></Table.Cell>
+                    {familiesRS.map((familly) => (
+                        <Table.Row key={familly.value}>
+                            <Table.Cell>{familly.value}</Table.Cell>
+                            <Table.Cell>{familly.label}</Table.Cell>
+                            <Table.Cell><Button onClick={()=>navigate(`/famillies/form/${familly.value}`)}>Edit</Button></Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>

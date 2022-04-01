@@ -22,6 +22,10 @@ import DeliveryPlacesList from '../../features/deliveryPlaces/DeliveryPlacesList
 import DeliveryPlaceForm from '../../features/deliveryPlaces/form/DeliveryPlaceForm';
 import StuffList from '../../features/stuffs/StuffList';
 import StuffForm from '../../features/stuffs/Form/StuffForm';
+import ArticleTypeList from '../../features/articles/ArticleTypeList';
+import AssignStuffToArticleType from '../../features/articles/articleTypeForm/AssignStuffToArticleType';
+import FamiliesList from '../../features/famillies/FamiliesList';
+import FamillyForm from '../../features/famillies/form/FamillyForm';
 
 function App() {
   const location=useLocation();
@@ -70,6 +74,15 @@ function App() {
           <Route path="stuffs" element={<StuffList />} />
           <Route key={1} path="stuffs/form" element={<StuffForm />} />
           <Route key={2} path="stuffs/form/:id" element={<StuffForm />} />
+
+          {/* Article types*/}
+          <Route path="articleTypes" element={<ArticleTypeList />} />
+          <Route path="articleTypes/assign/:id" element={<AssignStuffToArticleType />} />
+
+           {/* Stuffs*/}
+           <Route path="Famillies" element={<FamiliesList />} />
+          <Route key={1} path="famillies/form" element={<FamillyForm />} />
+          <Route key={2} path="famillies/form/:id" element={<FamillyForm />} />
 
           <Route path="notFound" element={<NotFound />} />
         </Route>

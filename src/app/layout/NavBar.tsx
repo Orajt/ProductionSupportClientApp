@@ -24,7 +24,7 @@ export default observer(function NavBar() {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={NavLink} to='/articles' name="ListArticles">Articles List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articles/form' name="ArticleForm">Create Article</Dropdown.Item>
-                                <Dropdown.Item as={NavLink} to='/articles/articleType/form' name="ArticleTypeForm">Assign stuff to Article Type</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/articleTypes' name="ArticleTypeList">Article type list</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         <Dropdown item text='Companies'>
@@ -43,6 +43,12 @@ export default observer(function NavBar() {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={NavLink} to='/stuffs' name="ListStuffs">Stuff list</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/stuffs/form' name="StuffForm">Create stuff</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown item text='Famillies'>
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={NavLink} to='/famillies' name="ListFamillies">Familly list</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/famillies/form' name="FamillyForm">Create familly</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                         <Menu.Item position='right'>

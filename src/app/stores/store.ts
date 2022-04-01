@@ -5,6 +5,7 @@ import CompanyStore from "./companyStore";
 import DeliveryPlaceStore from "./deliveryPlaceStore";
 import FamillyStore from "./famillyStore";
 import ModalStore from "./modalStore";
+import OrderPositionStore from "./OrderPositionStore";
 import OrderStore from "./orderStore";
 import StuffStore from "./stuffStore";
 import UserStore from "./userStore";
@@ -19,6 +20,7 @@ interface Store {
     famillyStore: FamillyStore;
     stuffStore: StuffStore;
     companyStore: CompanyStore;
+    orderPositionStore: OrderPositionStore;
 }
 
 export const store: Store = {
@@ -30,7 +32,8 @@ export const store: Store = {
     deliveryPlaceStore: new DeliveryPlaceStore(),
     famillyStore: new FamillyStore(),
     stuffStore: new StuffStore(),
-    companyStore: new CompanyStore()
+    companyStore: new CompanyStore(),
+    orderPositionStore: new OrderPositionStore()
 }
 
 export const StoreContext = createContext(store);

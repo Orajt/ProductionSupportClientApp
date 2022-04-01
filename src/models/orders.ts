@@ -69,3 +69,19 @@ export interface OrderSummary{
     deliveryPlaceName: string;
     positions: OrderSummaryClient[];
 }
+export interface OrderPositionListItem {
+    id: number;
+    orderId: number;
+    articleId: number;
+    orderName: string;
+    setId: number;
+    realization: string;
+    client: string;
+    quanity: number;
+    articleFullName: string;
+    shipmentDate: Date;
+    productionDate: Date;
+    articleTypeName: string;
+    famillyName: string;
+    stuffName: string;
+}

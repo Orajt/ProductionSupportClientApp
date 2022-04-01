@@ -68,11 +68,10 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
         params.append('articleTypeId', `${articleTypeId.toString()}`);
         params.append('stuffId', `${stuffId.toString()}`);
         params.append('predicate', 'CHECKNAME');
-        console.log("Pytam serwera");
+        console.log("Pytam serwera")
         let check = await agent.Articles.checkNameOrGetId(params, field);
         if (!isNaN(check)) {
             if (check === 1) {
-                console.log(check);
                 error = "Article with that parameters exists in database";
                 setNameError(error);
                 setName(field);
@@ -110,6 +109,7 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
         setFabicVariantFieldBlocked(false);
 
         if (articleTypeIdToCheck === 1 || articleTypeIdToCheck === 3) {
+            initialValues.stuffId=0;
             setStuffId(0);
             setStuffFieldBlocked(true);
         }
@@ -121,34 +121,35 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
     }
 
     useEffect(() => {
-        setLoading(true);
-        console.log((initialValues));
         if (editMode && !initialRender) {
+            setAditionalFormValid(true);
             blockFields(initialValues.articleTypeId);
+            setArticleTypeId(initialValues.articleTypeId);
             setName(initialValues.fullName);
+            
         }
         if (initialRender) {
-            setStuffList(stuffRS!.filter(p => p.articleTypeId === articleTypeId));
+            setStuffList(stuffRS!.filter(p => p.articleTypeId === articleTypeId))
         }
         if (!initialRender) {
+            setLoading(true);
             getFamiliesRS()
             .then(() => getStuffsListToSelect()).then((value)=>{
                 if(value)
                     setStuffList(value);
             })
             .finally(() => {
+                console.log(aditionalFormValid)
                 setLoading(false);
                 setInitialRender(true);  
             });
         }
-        setLoading(false);
     }, [initialValues, getFamiliesRS, getStuffsListToSelect, articleTypeId, setInitialRender]);
 
     if (loading) return <LoadingComponent></LoadingComponent>
     return (
         <>
             <Header content={title} as="h4" color='teal' />
-            {!editMode &&
                 <div>
                     <label className="boldFont">Choose Article Type</label>
                     <Select
@@ -158,16 +159,18 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
                         onChange={(d) => {
                             setArticleTypeId(d!.value);
                             blockFields(d!.value);
-                            setAditionalFormValid(false);
+                            if(!editMode)
+                            {
+                                setAditionalFormValid(false);
+                            } 
                             setStuffId(0);
                             validateName(nameToCheck, 0, true);
                             initialValues.articleTypeId = d?.value ? d.value : 0;
                         }}
                         placeholder={"Choose Article Type"}
-                        isDisabled={initialValues.ableToEditPrimaries}
+                        isDisabled={initialValues.ableToEditPrimaries || editMode}
                     />
                 </div>
-            }
             <Formik
                 validateOnBlur={true}
                 validateOnChange={false}
@@ -175,7 +178,7 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
                 enableReinitialize
                 initialValues={initialValues}
                 onSubmit={values => handleFormSubmit(values)}>
-                {({ handleSubmit, isValid, isSubmitting, dirty, touched }) => (
+                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                         <label className="boldFont">Article name</label>
                         <Field name="fullName" placeholder="Name" validate={(value: string) => validateName(value, stuffId, false)}></Field>

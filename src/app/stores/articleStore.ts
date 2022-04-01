@@ -52,6 +52,16 @@ export default class ArticleStore {
             console.log(error);
         }
     }
+    getArticleTypeDetails = async(id: number)=>{
+        try{
+            let articleTypeDetails = await agent.Articles.getArticleTypeDetails(id);
+            return articleTypeDetails;
+           
+        }catch(error){
+            console.log(error);
+        }
+    }
+
     getArticles = async(filters: FilterResult[])=>{
         try{
             this.loading = true;

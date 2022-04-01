@@ -1,12 +1,12 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
-import { OrderDetails, OrderFormValues, OrderListElem, OrderSummary} from '../../models/orders';
+import { OrderDetails, OrderFormValues, OrderListElem, OrderPositionListItem, OrderSummary} from '../../models/orders';
 import { ReactSelectInt} from '../../models/reactSelect';
 import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { PaginatedResult } from '../../models/pagination';
-import { Article, ArticleDetails } from '../../models/article';
+import { Article, ArticleDetails, ArticleTypeDetails } from '../../models/article';
 import {  StuffFormValues, StuffListItem, StuffListToSelect } from '../../models/stuff';
 import { CompanyDetails, CompanyFormValues, CompanyListItem } from '../../models/company';
 import { DeliveryPlaceDetails, DeliveryPlaceFormValues, DeliveryPlaceListItem } from '../../models/deliveryPlace';
@@ -96,13 +96,15 @@ const Order={
 const Articles={
     getReactSelect:(id: number, predicate: string)=>requests.get<ReactSelectInt[]>(`/article/${id}/${predicate}`),
     getArticleTypesRS:()=>requests.get<ReactSelectInt[]>('/articleType'),
+    getArticleTypeDetails:(id: number)=>requests.get<ArticleTypeDetails>(`/articleType/${id}`),
     getList:(params: URLSearchParams)=>axios.get<PaginatedResult<Article[]>>(`/article`,{params}).then(responseBody),
     details:(id: string)=>requests.get<ArticleDetails>(`/article/${id}`),
     checkNameOrGetId:(params: URLSearchParams, articleName: string)=>axios.get<number>(`/article/check/name/${articleName}`, {params}).then(responseBody),
     delete: (id: number)=>requests.del<void>(`article/${id}`,{})
 }
 const OrderPosition={
-    deleteOrderPositions: (id: number, positions: number[])=>requests.post<void>(`/orderPosition/${id}`, {positionsToRemove: positions}) 
+    deleteOrderPositions: (id: number, positions: number[])=>requests.post<void>(`/orderPosition/${id}`, {positionsToRemove: positions}),
+    getList:(params: URLSearchParams)=>axios.get<PaginatedResult<OrderPositionListItem[]>>(`/orderPosition`,{params}).then(responseBody), 
 }
 const DeliveryPlace={
     getReactSelect: (predicate:string)=>requests.get<ReactSelectInt[]>(`/deliveryPlace/list/reactSelect?predicate=${predicate}`),
