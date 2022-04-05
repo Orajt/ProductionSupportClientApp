@@ -129,7 +129,7 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
             
         }
         if (initialRender) {
-            setStuffList(stuffRS!.filter(p => p.articleTypeId === articleTypeId))
+            setStuffList(stuffRS!.filter(p => p.articleTypesIds.some(x=>x===articleTypeId)))
         }
         if (!initialRender) {
             setLoading(true);

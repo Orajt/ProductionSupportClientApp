@@ -1,7 +1,7 @@
 import { ReactSelectInt } from "./reactSelect";
 
 export interface StuffListToSelect extends ReactSelectInt{
-    articleTypeId: number;
+    articleTypesIds: number[];
 }
 export interface StuffListItem {
     id: number;

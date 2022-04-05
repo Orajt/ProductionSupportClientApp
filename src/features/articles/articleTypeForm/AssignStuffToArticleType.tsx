@@ -48,9 +48,9 @@ export default observer(function AssignStuffToArticleType() {
                 setArticleType(value as AssignArticleFormValues)
             })
                 .then(() => getStuffsListToSelect().then((value) => {
-                    let newValues = value as ReactSelectInt[];
-                    let listToSelect = newValues.filter(i => !articleType.stuffs.includes(i))
-                    setStuffRS(listToSelect);
+                    let listToSelect = value!.filter(i => !i.articleTypesIds.some(x=>x===articleType.id))
+                    let newValues = listToSelect as ReactSelectInt[];
+                    setStuffRS(newValues);
                 }))
                 .then(() => setLoading(false))
         }
