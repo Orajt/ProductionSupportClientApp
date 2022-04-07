@@ -19,7 +19,6 @@ export default class ArticleStore {
     pagingParams=new PagingParams(1,20);
 
     clear = () => {
-        console.log("im clearing");
         this.loading=true;
         this.articleList = [];
         this.articlesRS=[];
@@ -34,7 +33,6 @@ export default class ArticleStore {
             let articlesRS = await agent.Articles.getReactSelect(articleTypeId, predicate);
             runInAction(()=>{
                 this.articlesRS=articlesRS;
-                console.log(toJS(articlesRS));
             })
         }catch(error){
             console.log(error);
@@ -89,7 +87,6 @@ export default class ArticleStore {
         try{
             this.loading = true;
             let article = await agent.Articles.details(id);
-            console.log(article);
             runInAction(()=>{
                 if(article.nameWithoutFamilly===null)
                     article.nameWithoutFamilly="";

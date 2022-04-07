@@ -11,7 +11,9 @@ export class FilterResult{
     intValue: number | null=0;
     dateValue: Date | null = null;
     stringValue: string="";
+    booleanValue: boolean | null = null;
     filterOption: string="";
+    destroy: boolean=false;
 
 
 }

@@ -18,7 +18,6 @@ export default class StuffStore {
     getStuffsListToSelect = async()=>{
         try{
             const stuffRS = await agent.Stuffs.getReactSelect();
-            console.log(stuffRS);
             runInAction(()=>{
                 this.stuffRS=stuffRS;
             })

@@ -27,8 +27,6 @@ export default observer(function ArticleFormSecondary({articleTypeId, handleForm
     })
     useEffect(() => {
         setLoading(true)
-        console.log("z drugiego komponentu, articleType to:")
-        console.log(articleTypeId);
         getArticlesRS(articleTypeId, false).then(()=>setLoading(false));
     }, [getArticlesRS, articleTypeId]);
 

@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Header, Icon, Pagination, PaginationProps, Table } from "semantic-ui-react";
+import BooleanDropdown from "../../../app/common/filters/BooleanDropdown";
+import BooleanFilter from "../../../app/common/filters/BooleanFilter";
 import DateFilter from "../../../app/common/filters/DateFilter";
 import NumberFilter from "../../../app/common/filters/NumberFilter";
 import StringFilter from "../../../app/common/filters/StringFilter";
@@ -28,15 +30,21 @@ export default observer(function OrderList() {
 
     function handleSetFilters(filter: FilterResult){
         var newFilters = filters.filter(p=>p.propertyName!==filter.propertyName);
-        if(filter.dateValue!==null || filter.intValue!==0 || filter.stringValue){
+        if(filter.destroy){
+            setFilters(newFilters);
+            return;
+        }
+            
+        if(filter.dateValue!==null || filter.intValue!==0 || filter.stringValue || filter.booleanValue!==null){
             newFilters.push(filter);
         }
         setFilters(newFilters);
-        console.log(filters);
+        console.log(newFilters);
     }
     function clearAllFilters(){
+        setLoading(true);
         setFilters([]);
-        getOrderList([]);
+        getOrderList([]).then(()=>setLoading(false));
     }
     function pageChaanged(e: PaginationProps ){
         let newPagingParams={...pagingParams};
@@ -76,7 +84,7 @@ export default observer(function OrderList() {
                         <Table.HeaderCell><DateFilter propertyName="ShipmentDate" setFilter={handleSetFilters} clearAll={clearAllFilters} key="ShipmentDate"></DateFilter></Table.HeaderCell>
                         <Table.HeaderCell><DateFilter propertyName="ProductionDate" setFilter={handleSetFilters} clearAll={clearAllFilters} key="ProductionDate"></DateFilter></Table.HeaderCell>
                         <Table.HeaderCell><StringFilter propertyName="DeliveryPlaceName" setFilter={handleSetFilters} clearAll={clearAllFilters} key="DeliveryPlaceName"></StringFilter></Table.HeaderCell>
-                        <Table.HeaderCell></Table.HeaderCell>
+                        <Table.HeaderCell><BooleanDropdown propertyName="Done" setFilter={handleSetFilters} clearAll={clearAllFilters} key="Done"></BooleanDropdown></Table.HeaderCell>
                         <Table.HeaderCell></Table.HeaderCell>
                         <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>

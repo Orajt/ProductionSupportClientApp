@@ -130,8 +130,11 @@ const Companies={
     listReactSelect: (predicate: string)=>requests.get<ReactSelectInt[]>(`/company/reactSelect/${predicate}`),
     create:(company: CompanyFormValues) => requests.post<void>(`/company`, company),
     edit:(company: CompanyFormValues) => requests.put<void>(`/company/${company.id}`, company),
-    
 }
+const Files ={
+    listRS:(type: string)=>requests.get<ReactSelectInt[]>(`/file/list/reactSelect/${type}`),
+    getArticlePdf: (id: number)=>requests.get<Blob>(`/file/${id}`)
+};
 
 
 
@@ -143,7 +146,8 @@ const agent = {
     DeliveryPlace,
     Families,
     Stuffs,
-    Companies
+    Companies,
+    Files
 }
 
 export default agent;

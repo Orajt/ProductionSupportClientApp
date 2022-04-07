@@ -26,6 +26,7 @@ import ArticleTypeList from '../../features/articles/ArticleTypeList';
 import AssignStuffToArticleType from '../../features/articles/articleTypeForm/AssignStuffToArticleType';
 import FamiliesList from '../../features/famillies/FamiliesList';
 import FamillyForm from '../../features/famillies/form/FamillyForm';
+import ArticlePdf from '../../features/ArticlePdf';
 
 function App() {
   const location=useLocation();
@@ -79,10 +80,13 @@ function App() {
           <Route path="articleTypes" element={<ArticleTypeList />} />
           <Route path="articleTypes/assign/:id" element={<AssignStuffToArticleType />} />
 
-           {/* Stuffs*/}
-           <Route path="Famillies" element={<FamiliesList />} />
+          {/* Stuffs*/}
+          <Route path="Famillies" element={<FamiliesList />} />
           <Route key={1} path="famillies/form" element={<FamillyForm />} />
           <Route key={2} path="famillies/form/:id" element={<FamillyForm />} />
+
+          {/* Files*/}
+          <Route path="files/pdf/:id" element={<ArticlePdf />} />
 
           <Route path="notFound" element={<NotFound />} />
         </Route>

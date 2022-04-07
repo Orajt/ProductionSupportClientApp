@@ -48,8 +48,9 @@ export default observer(function AssignStuffToArticleType() {
                 setArticleType(value as AssignArticleFormValues)
             })
                 .then(() => getStuffsListToSelect().then((value) => {
-                    let listToSelect = value!.filter(i => !i.articleTypesIds.some(x=>x===articleType.id))
+                    let listToSelect = value!.filter(i => !i.articleTypesIds.some(x=>x===parseInt(id)))
                     let newValues = listToSelect as ReactSelectInt[];
+                    // let newValues = listToSelect as ReactSelectInt[];
                     setStuffRS(newValues);
                 }))
                 .then(() => setLoading(false))
@@ -86,6 +87,7 @@ export default observer(function AssignStuffToArticleType() {
         setAbleToAddStuff(true);
     }
     function deleteChecked() {
+        let newArticleType = { ...articleType, stuffs: [...articleType.stuffs] }
         let stuffsInArticleType = [...articleType.stuffs]
         let newPossibleStuffs = stuffsInArticleType.map(function (stuff, i) {
             if (indexesToDelete.some(p => p == i))
@@ -99,9 +101,9 @@ export default observer(function AssignStuffToArticleType() {
         setStuffRS(newStuffRS.sort(function (a, b) {
             return a.label.localeCompare(b.label)
         }))
-        let newArticleType = { ...articleType }
+        console.log("To są nowe stuffy, które tutaj powinny być nietknięte");
         console.log(newArticleType.stuffs);
-        newArticleType.stuffs = Utilities.removeItemFromCollectionBasedOnIndex(articleType.stuffs, indexesToDelete);
+        newArticleType.stuffs = Utilities.removeItemFromCollectionBasedOnIndex(newArticleType.stuffs, indexesToDelete);
         setIndexesToDelete([]);
         setAbleToAddStuff(true);
         console.log(newArticleType);
@@ -177,7 +179,7 @@ export default observer(function AssignStuffToArticleType() {
                             </Table.Header>
                             <Table.Body>
                                 {articleType.stuffs.map((stuff, i) => (
-                                    <Table.Row key={i}>
+                                    <Table.Row key={stuff.value}>
                                         <Table.Cell><Checkbox className="width100p" onChange={(e, data) => { handleCheckStuffChaange(data, i) }} /></Table.Cell>
                                         <Table.Cell>{stuff.value}</Table.Cell>
                                         <Table.Cell>{stuff.label}</Table.Cell>

@@ -3,7 +3,8 @@ import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Button, Grid, GridColumn, Header, Segment } from "semantic-ui-react";
+import { toast } from "react-toastify";
+import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, Icon, Segment } from "semantic-ui-react";
 import { Utilities } from "../../../app/common/utilities/Utilities";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
@@ -11,8 +12,9 @@ import { ArticleFormValues, ArticlePositionFormValues } from "../../../models/ar
 import NotFound from "../../errors/NotFound";
 import ArticleDetails from "../ArticleDetails";
 import ArticleFormComponents from "./ArticleFormComponents";
-import ArticleFormPrimary from "./ArticleFormPrimary";
 import ArticleFormSecondary from "./ArticleFormSecondary";
+import ArticleFormPrimary from "./ArticleFormPrimary";
+import ManagePdfFile from "./ManagePdfFile";
 
 export default observer(function ArticleForm() {
 
@@ -26,23 +28,22 @@ export default observer(function ArticleForm() {
     const navigate = useNavigate();
 
     ////////////////LOCAL STATE//////////////////////////////////////
-    const [article, setArticle] = useState<ArticleFormValues>(new ArticleFormValues());
     const [editMode, setEditMode] = useState(false);
+    const [article, setArticle] = useState<ArticleFormValues>(new ArticleFormValues());
     const [title, setTitle] = useState("Create new article");
     const [loading, setLoading] = useState(true);
     const [secondStep, setSecondStep] = useState(false);
-    const [primaryFormVisible, setPrimaryFormVisible] = useState(true);
     const [secondFormBlocked, setsecondFormBlocked] = useState(false);
     const [reallyWantToDelete, setreallyWantToDelete] = useState(false);
     const [someChaanges, setSomeChaanges] = useState(false);
     const [articlesToDeleteFromOrder, setarticlesToDeleteFromOrder] = useState<number[]>([]);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
         if (id && !isNaN(parseInt(id))) {
             getArticleDetails(id).then((value) => {
-                console.log(value);
-                setArticle(value as ArticleFormValues);
-
+                var newValue = { ...value }
+                setArticle(newValue as ArticleFormValues);
             })
                 .then(() => getArticleTypesRS(true))
                 .finally(() => {
@@ -61,19 +62,29 @@ export default observer(function ArticleForm() {
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(saveAndSeeDetails: boolean) {
+        console.log(article);
         setLoading(true)
         if (editMode) {
             axios.put<void>(`/article/${id}`, article).then((response) => {
-                if (response.status === 200 && saveAndSeeDetails) {
-                    navigate(`/articles/${id}`);
+                if (response.status === 200) {
+                    if (saveAndSeeDetails) {
+                        navigate(`/articles/${id}`);
+                        return;
+                    }
+                    toast.success("Article edit successfully");
                     return;
                 }
             })
         }
         if (!editMode) {
             axios.post<void>(`/article/`, article).then((response) => {
-                if (response.status === 200 && saveAndSeeDetails) {
-                    navigate(`/articles/${article.fullName}`);
+                if (response.status === 200) {
+                    if (saveAndSeeDetails) {
+                        navigate(`/articles/${article.fullName}`);
+                        return;
+                    }
+                    setArticle(new ArticleFormValues());
+                    toast.success("Article create successfully");
                     return;
                 }
             })
@@ -81,35 +92,39 @@ export default observer(function ArticleForm() {
         setLoading(false);
     }
     function handlePrimaryFormSubmit(values: ArticleFormValues) {
-        console.log(values);
+        console.log("Nakurwiam");
         let newArticle = {
             ...values
         }
-        if (values.famillyReactSelect !== null)
+        if (values.famillyReactSelect)
             newArticle.famillyId = values.famillyReactSelect.value;
         if (values.stuffReactSelect)
             newArticle.stuffId = values.stuffReactSelect.value;
         if (values.articleTypeReactSelect)
             newArticle.articleTypeId = values.articleTypeReactSelect.value;
-
-        console.log(values);
+        newArticle.childArticles = [...article.childArticles];
         setArticle(newArticle);
-        setPrimaryFormVisible(false);
         setSecondStep(true);
         setSomeChaanges(true);
     }
     function handleSecondaryFormSubmit(values: ArticlePositionFormValues) {
-        console.log(values);
         let newArticle = {
-            ...article
+            ...article,
+            childArticles: [...article.childArticles]
         }
-        values.childArticleName = values.articleRS!.label;
-        values.childId = values.articleRS!.value;
-        newArticle.childArticles.push(values);
+        let newValues = { ...values };
+        console.log(newValues.childId);
+
+        let index = newArticle.childArticles.findIndex(p => p.childId === newValues.articleRS!.value);
+        if (index >= 0) {
+            newArticle.childArticles.splice(index, 1)
+        }
+        newValues.childArticleName = values.articleRS!.label;
+        newValues.childId = values.articleRS!.value;
+        newArticle.childArticles.push(newValues);
         newArticle.childArticles.sort(function (a: ArticlePositionFormValues, b: ArticlePositionFormValues) {
             return a.childArticleName.localeCompare(b.childArticleName);
         })
-        console.log(newArticle);
         setArticle(newArticle);
         setSomeChaanges(true);
     }
@@ -135,6 +150,13 @@ export default observer(function ArticleForm() {
         setSomeChaanges(true);
         setsecondFormBlocked(false);
     }
+    function handleAccordion(e: React.MouseEvent<HTMLDivElement, MouseEvent>, props: AccordionTitleProps) {
+        const { index } = props;
+        let newIndex = activeIndex === index ? -1 : index
+        if (!isNaN(parseInt(newIndex!.toString()))) {
+            setActiveIndex(parseInt(newIndex!.toString()));
+        }
+    }
 
     if (loading) return <LoadingComponent content="loading"></LoadingComponent>;
     if (id && ArticleDetails === null) return <NotFound></NotFound>
@@ -142,43 +164,69 @@ export default observer(function ArticleForm() {
     return (
         <>
             <Segment clearing>
-                <Grid>
-                    <Grid.Row textAlign="left">
-                        <GridColumn width="7">
-                            {primaryFormVisible ? <ArticleFormPrimary title={title} articleTypes={articleTypesRS}
-                                initialValues={article} handleFormSubmit={handlePrimaryFormSubmit} editMode={editMode}></ArticleFormPrimary> :
-                                <Header as="h2">{article.fullName}</Header>}
-                        </GridColumn>
-                        <GridColumn width="9">
+                <Accordion fluid>
+                    <Accordion.Title
+                        active={activeIndex === 0}
+                        index={0}
+                        className="fontSizeXXLarge"
+                        onClick={(e, props) => {
+                            handleAccordion(e, props);
+                        }}>
+                        <Icon name='dropdown' />
+                        Primary form
+                    </Accordion.Title>
+                    <AccordionContent active={activeIndex === 0}>
+                        <Grid>
                             <Grid.Row>
-                                {!primaryFormVisible ?
-                                    <Button onClick={() => setPrimaryFormVisible(true)}>Show article form</Button> :
-                                    <Button onClick={() => setPrimaryFormVisible(false)}>Hide article form</Button>}
-                                {someChaanges && <Button positive onClick={() => handleFormSubmit(true)}>Save Chaanges and see details</Button>}
-                                {someChaanges && !editMode && <Button positive onClick={() => handleFormSubmit(false)}>Save Chaanges and create another</Button>}
+                                <GridColumn width="7">
+                                    <ArticleFormPrimary title={title} articleTypes={articleTypesRS}
+                                        initialValues={article} handleFormSubmit={handlePrimaryFormSubmit} editMode={editMode}></ArticleFormPrimary>
+                                </GridColumn>
+                                <GridColumn width="9">
+                                    <Grid.Row>
+                                        {someChaanges && <Button positive onClick={() => handleFormSubmit(true)}>Save Chaanges and see details</Button>}
+                                        {someChaanges && !editMode && <Button positive onClick={() => handleFormSubmit(false)}>Save Chaanges and create another</Button>}
+                                    </Grid.Row>
+                                    <Grid.Row>
+                                        {secondFormBlocked && !reallyWantToDelete && <Button size="medium" color="red" onClick={() => setreallyWantToDelete(true)}>Delete selected</Button>}
+                                        {secondFormBlocked && reallyWantToDelete &&
+                                            <React.Fragment>
+                                                <Button size="medium" color="red" onClick={() => deleteReally()}>Delete</Button>
+                                                <Button size="medium" color="orange" onClick={() => setreallyWantToDelete(false)}>Cancell</Button>
+                                            </React.Fragment>}
+                                    </Grid.Row>
+                                </GridColumn>
                             </Grid.Row>
-                            <Grid.Row>
-                                {secondFormBlocked && !reallyWantToDelete && <Button size="medium" color="red" onClick={() => setreallyWantToDelete(true)}>Delete selected</Button>}
-                                {secondFormBlocked && reallyWantToDelete &&
-                                    <React.Fragment>
-                                        <Button size="medium" color="red" onClick={() => deleteReally()}>Delete</Button>
-                                        <Button size="medium" color="orange" onClick={() => setreallyWantToDelete(false)}>Cancell</Button>
-                                    </React.Fragment>}
-                            </Grid.Row>
-                        </GridColumn>
-                    </Grid.Row>
-                    {secondStep &&
+                            {secondStep &&
+                                <Grid.Row>
+                                    <Grid.Column width="7">
+                                        <ArticleFormSecondary articleTypeId={article.articleTypeId} handleFormSubmit={handleSecondaryFormSubmit} isBlocked={secondFormBlocked}></ArticleFormSecondary>
+                                    </Grid.Column>
+                                    <Grid.Column width={9}>
+                                        <ArticleFormComponents components={article.childArticles} handleCheck={handleCheckChaange}></ArticleFormComponents>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            }
+                        </Grid>
+                    </AccordionContent>
+                    {editMode &&
                         <Grid.Row>
-                            <Grid.Column width="7">
-                                <ArticleFormSecondary articleTypeId={article.articleTypeId} handleFormSubmit={handleSecondaryFormSubmit} isBlocked={secondFormBlocked}></ArticleFormSecondary>
-                            </Grid.Column>
-                            <Grid.Column width={9}>
-                                <ArticleFormComponents components={article.childArticles} handleCheck={handleCheckChaange}></ArticleFormComponents>
-                            </Grid.Column>
-                        </Grid.Row>
-                    }
-                </Grid>
-            </Segment>
+                            <Accordion.Title
+                                active={activeIndex === 1}
+                                index={1}
+                                className="fontSizeXXLarge"
+                                onClick={(e, props) => {
+                                    handleAccordion(e, props);
+                                }}>
+                                <Icon name='dropdown' />
+                                Manage pdf file
+                            </Accordion.Title>
+                            <AccordionContent active={activeIndex === 1}>
+                                <ManagePdfFile articleId={article.id} pdfName={article.pdfFile?.fileName}></ManagePdfFile>
+                            </AccordionContent>
+                        </Grid.Row>}
+                </Accordion>
+            </Segment >
         </>
     )
 })

@@ -18,6 +18,10 @@ export interface ArticleDetailsChildArticles {
     childArticleHasChild: boolean;
     quanity: number;
 }
+export interface DetailFileDto {
+    id: number;
+    fileName: string;
+}
 
 export interface ArticleDetails {
     id: number;
@@ -45,6 +49,9 @@ export interface ArticleDetails {
     createdInCompany: boolean;
     ableToEditPrimaries: boolean;
     childArticles: ArticleDetailsChildArticles[];
+    pdfFile: DetailFileDto;
+    images: DetailFileDto[];
+
 }
 export class ArticleFormValues{
     id: number=0;
@@ -53,13 +60,13 @@ export class ArticleFormValues{
     articleTypeReactSelect: ReactSelectInt | null=null;
     articleTypeId: number=0;
     articleTypeName: string="";
-    famillyReactSelect: ReactSelectInt | null=null;
+    famillyReactSelect?: ReactSelectInt | null=null;
     famillyId: number | null=null;
     famillyName: string="";
     editDate: Date | null=null;
     createDate: Date | null=null;
     stuffId: number | null=0;
-    stuffReactSelect: ReactSelectInt | null=null;
+    stuffReactSelect?: ReactSelectInt | null=null;
     stuffName: string="";
     fabricVariantGroupId: number | null=null;
     fabricVariantGroupName: string ="";
@@ -69,6 +76,8 @@ export class ArticleFormValues{
     createdInCompany: boolean=false;
     ableToEditPrimaries: boolean=false;
     childArticles: ArticleDetailsChildArticles[]=[];
+    pdfFile?: DetailFileDto;
+    images?: DetailFileDto[];
 }
 export class ArticlePositionFormValues{
     childId: number=0;

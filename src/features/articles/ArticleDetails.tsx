@@ -2,8 +2,8 @@ import axios from "axios";
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, GridRow, Header, Icon, Table } from "semantic-ui-react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, GridRow, Header, Icon, List, Table } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/store";
 import NotFound from "../errors/NotFound";
@@ -14,6 +14,7 @@ export default observer(function ArticleDetails() {
     const { articleDetails, getArticleDetails, loading, clear } = articleStore;
     const { id } = useParams<{ id: string }>();
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [deleteReally, setDeleteReally] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,7 +50,13 @@ export default observer(function ArticleDetails() {
                         <Header as="h1">Article: {articleDetails!.fullName}</Header>
                     </Grid.Row>
                     <Grid.Row>
-                        <Button color="teal" size="large" onClick={()=>navigate(`/articles/form/${articleDetails.id}`)}>Edit</Button>
+                        <Button color="teal" size="large" onClick={() => navigate(`/articles/form/${articleDetails.id}`)}>Edit</Button>
+                        {articleDetails.ableToEditPrimaries && !deleteReally && <Button color="red" size="large" onClick={() => setDeleteReally(true)}>Delete</Button>}
+                        {articleDetails.ableToEditPrimaries && deleteReally &&
+                            <div>
+                                <Button color="red" size="large" onClick={() => deleteArticle()}>Delete</Button>
+                                <Button color="orange" size="large" onClick={() => setDeleteReally(false)}>Cancell</Button>
+                            </div>}
                     </Grid.Row>
                     <Accordion>
                         <Accordion.Title
@@ -148,6 +155,28 @@ export default observer(function ArticleDetails() {
                                 </Table>
                             </GridRow>
                         </AccordionContent>
+                        <Accordion.Title
+                            active={activeIndex === 3}
+                            index={3}
+                            className="fontSizeXXLarge"
+                            onClick={(e, props) => {
+                                handleAccordion(e, props);
+                            }}>
+                            <Icon name='dropdown' />
+                            Pdf file
+                        </Accordion.Title>
+                        <AccordionContent active={activeIndex === 3}>
+                            {articleDetails.pdfFile && <List>
+                                <List.Item>
+                                    <List.Content floated="right">
+                                        <Link to={`/files/pdf/${articleDetails.pdfFile.id}`}><List.Icon name='video play' size='large' /></Link>
+                                    </List.Content>
+                                    <List.Content>
+                                        <List.Header className="fontSizeMedium" as='a'>Name: {articleDetails.pdfFile.fileName}</List.Header>
+                                    </List.Content>
+                                </List.Item>
+                            </List>}
+                        </AccordionContent>
                     </Accordion>
                 </Grid.Column>
                 <Grid.Column width={6}>
@@ -174,7 +203,7 @@ export default observer(function ArticleDetails() {
                                             <Table.Cell>{article.childArticleName}</Table.Cell>
                                             <Table.Cell>{article.childArticleType}</Table.Cell>
                                             <Table.Cell>{article.quanity}</Table.Cell>
-                                            <Table.Cell>{article.childArticleHasChild ? <Icon name="angle right"></Icon> : ""}</Table.Cell>
+                                            <Table.Cell>{article.childArticleHasChild ? <Button onClick={() => navigate(`/articles/${article.childId}`)}><Icon size="small" name="angle right"></Icon></Button> : ""}</Table.Cell>
                                         </Table.Row>
                                     ))}
                                 </Table.Body>
