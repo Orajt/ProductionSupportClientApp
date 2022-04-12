@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, Icon, Segment } from "semantic-ui-react";
+import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, Header, Icon, Segment } from "semantic-ui-react";
 import { Utilities } from "../../../app/common/utilities/Utilities";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
@@ -15,6 +15,7 @@ import ArticleFormComponents from "./ArticleFormComponents";
 import ArticleFormSecondary from "./ArticleFormSecondary";
 import ArticleFormPrimary from "./ArticleFormPrimary";
 import ManagePdfFile from "./ManagePdfFile";
+import ManageImages from "./ManageImages";
 
 export default observer(function ArticleForm() {
 
@@ -164,6 +165,10 @@ export default observer(function ArticleForm() {
     return (
         <>
             <Segment clearing>
+                <Header as ="h1" color="teal">
+                    {title}
+                </Header>
+                {editMode && <Button onClick={()=>navigate(`/articles/${id}`)}>Back to details</Button>}
                 <Accordion fluid>
                     <Accordion.Title
                         active={activeIndex === 0}
@@ -223,6 +228,22 @@ export default observer(function ArticleForm() {
                             </Accordion.Title>
                             <AccordionContent active={activeIndex === 1}>
                                 <ManagePdfFile articleId={article.id} pdfName={article.pdfFile?.fileName}></ManagePdfFile>
+                            </AccordionContent>
+                        </Grid.Row>}
+                        {editMode &&
+                        <Grid.Row>
+                            <Accordion.Title
+                                active={activeIndex === 2}
+                                index={2}
+                                className="fontSizeXXLarge"
+                                onClick={(e, props) => {
+                                    handleAccordion(e, props);
+                                }}>
+                                <Icon name='dropdown' />
+                                Manage images
+                            </Accordion.Title>
+                            <AccordionContent active={activeIndex === 2}>
+                                <ManageImages articleId={article.id} images={article.images?.map(function (v){return v.fileName})}></ManageImages>
                             </AccordionContent>
                         </Grid.Row>}
                 </Accordion>

@@ -3,10 +3,11 @@ import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridColumn, GridRow, Header, Icon, List, Table } from "semantic-ui-react";
+import { Accordion, AccordionContent, AccordionTitleProps, Button, Grid, GridRow, Header, Icon, List, Table, Image } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useStore } from "../../app/stores/store";
 import NotFound from "../errors/NotFound";
+import ArticleDetailsImage from "./ArticleDetailsImage";
 
 export default observer(function ArticleDetails() {
 
@@ -25,7 +26,7 @@ export default observer(function ArticleDetails() {
     }, [id, getArticleDetails, clear]);
 
     function deleteArticle() {
-        axios.delete<void>(`article/${id}`, {}).then((response) => {
+        axios.delete<void>(`article/${articleDetails!.id}`, {}).then((response) => {
             if (response.status === 200) {
                 navigate('/articles');
             }
@@ -176,6 +177,23 @@ export default observer(function ArticleDetails() {
                                     </List.Content>
                                 </List.Item>
                             </List>}
+                        </AccordionContent>
+                        <Accordion.Title
+                            active={activeIndex === 4}
+                            index={4}
+                            className="fontSizeXXLarge"
+                            onClick={(e, props) => {
+                                handleAccordion(e, props);
+                            }}>
+                            <Icon name='dropdown' />
+                            Photos
+                        </Accordion.Title>
+                        <AccordionContent active={activeIndex === 4}>
+                            <Image.Group size="small">
+                            {articleDetails.images && articleDetails.images.map((image)=>(
+                                <ArticleDetailsImage key={image.id} fileName={image.fileName} id={image.id} ></ArticleDetailsImage>
+                            ))}
+                            </Image.Group>
                         </AccordionContent>
                     </Accordion>
                 </Grid.Column>

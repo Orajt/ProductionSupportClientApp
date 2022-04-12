@@ -27,6 +27,7 @@ import AssignStuffToArticleType from '../../features/articles/articleTypeForm/As
 import FamiliesList from '../../features/famillies/FamiliesList';
 import FamillyForm from '../../features/famillies/form/FamillyForm';
 import ArticlePdf from '../../features/ArticlePdf';
+import Gowno from '../common/Gowno';
 
 function App() {
   const location=useLocation();
@@ -87,6 +88,9 @@ function App() {
 
           {/* Files*/}
           <Route path="files/pdf/:id" element={<ArticlePdf />} />
+
+           {/* Images */}
+           <Route path="images" element={<Gowno />} />
 
           <Route path="notFound" element={<NotFound />} />
         </Route>

@@ -18,7 +18,7 @@ export default function ArticlePdf() {
     useEffect(() => {
         try {
             axios({
-                url: `/file/${id}`, //your url
+                url: `/file/${id}/pdf`, //your url
                 method: "GET",
                 responseType: "blob", // important
             })

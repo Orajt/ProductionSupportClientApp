@@ -175,7 +175,6 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
     if (loading) return <LoadingComponent></LoadingComponent>
     return (
         <Grid.Row>
-            <Header content={title} as="h4" color='teal' />
             <div>
                 <label className="boldFont">Choose Article Type</label>
                 <Select
