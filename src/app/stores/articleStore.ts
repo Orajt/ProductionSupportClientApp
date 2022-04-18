@@ -34,6 +34,7 @@ export default class ArticleStore {
             runInAction(()=>{
                 this.articlesRS=articlesRS;
             })
+            return articlesRS;
         }catch(error){
             console.log(error);
         }

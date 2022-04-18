@@ -9,6 +9,7 @@ import { Utilities } from "../../../app/common/utilities/Utilities";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import { OrderDetails, OrderFormValues,OrderPositionFormValues } from "../../../models/orders";
+import { ReactSelectInt } from "../../../models/reactSelect";
 import NotFound from "../../errors/NotFound";
 import OrderPositionTable from "../OrderList/OrderPositionTable";
 import OrderFormPrimary from "./OrderFormPrimary";
@@ -21,7 +22,7 @@ export default observer(function OrderForm() {
     const { orderStore, deliveryPlaceStore, articleStore, modalStore } = useStore();
     const { orderDetails, getOrderDetails, clear} = orderStore;
     const { deliveryPlacesRS, getDeliveryPlacesRS } = deliveryPlaceStore;
-    const { getArticleTypesRS, articleTypesRS } = articleStore;
+    const { getArticleTypesRS, articleTypesRS, getArticlesRS } = articleStore;
     const{closeModal}=modalStore;
 
     ////////////////ROUTE PARAMS//////////////////////////////////////
@@ -39,6 +40,7 @@ export default observer(function OrderForm() {
     const [articleTypeRSValue, setArticleTypeRSValue] = useState(0);
     const [someChaanges, setSomeChaanges]=useState(false);
     const [articlesToDeleteFromOrder, setarticlesToDeleteFromOrder] = useState<number[]>([]);
+    const [fabrics, setFabrics]=useState<ReactSelectInt[]>([]);
 
 
 
@@ -47,12 +49,25 @@ export default observer(function OrderForm() {
             getOrderDetails(parseInt(id)).then((value) => setOrder(value as OrderFormValues))
                 .then(() => getDeliveryPlacesRS("DEALER"))
                 .then(() => getArticleTypesRS(false))
+                .then(()=>getArticlesRS(6,true))
+                .then((val)=>{
+                    if(val)
+                        setFabrics(val);
+                    console.log(val);
+                })
                 .finally(() => { setTitle(`Edit order ${order.name}`); setEditMode(true); setLoading(false); });
 
             setSecondStep(true);
         }
         if (!id) {
-            getDeliveryPlacesRS("DEALER").then(() => getArticleTypesRS(false)).then(() => setLoading(false))
+            getDeliveryPlacesRS("DEALER")
+                .then(() => getArticleTypesRS(false))
+                .then(()=>getArticlesRS(6,true))
+                .then((val)=>{
+                    if(val)
+                        setFabrics(val);
+                })
+                .then(() => setLoading(false))
         }
         return clear();
 
@@ -60,6 +75,7 @@ export default observer(function OrderForm() {
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(){
+        console.log(order);
         setLoading(true)
         if(editMode){
             axios.put<void>(`/order/${id}`, order).then((response)=>{
@@ -91,9 +107,14 @@ export default observer(function OrderForm() {
         setSomeChaanges(true);
     }
     function handleSecondaryFormSubmit(values: OrderPositionFormValues) {
+        console.log("To chcę dodać kurwa")
         console.log(values);
+        let newOrderPositions = [
+            ...order.orderPositions
+        ]
         let newOrder = {
-            ...order
+            ...order,
+            orderPositions: newOrderPositions
         }
         values.articleId = values.articleRS!.value;
         values.articleName = values.articleRS!.label;
@@ -101,6 +122,7 @@ export default observer(function OrderForm() {
         newOrder.orderPositions.sort(function (a: OrderPositionFormValues, b: OrderPositionFormValues) {
             return a.client.localeCompare(b.client) || a.setId - b.setId || a.lp - b.lp;
         })
+        console.log("A to wychodzi")
         console.log(newOrder);
         setOrder(newOrder);
         setSomeChaanges(true);
@@ -136,9 +158,6 @@ export default observer(function OrderForm() {
         console.log(!isNaN(pos.index!))
         if(!isNaN(pos.index!)){
             newOrder.orderPositions[pos.index!]=pos;
-            console.log("----after chaange-----")
-            console.log(newOrder.orderPositions[pos.index!])
-
             newOrder.orderPositions.sort(function (a: OrderPositionFormValues, b: OrderPositionFormValues) {
                 return a.client.localeCompare(b.client) || a.setId - b.setId || a.lp - b.lp;
             })
@@ -192,7 +211,7 @@ export default observer(function OrderForm() {
                                     placeholder={"Choose Article Type"}
                                 />
 
-                                <OrderFormSecondary articleTypeId={articleTypeRSValue} handleFormSubmit={handleSecondaryFormSubmit} isBlocked={secondFormBlocked}
+                                <OrderFormSecondary articleTypeId={articleTypeRSValue} handleFormSubmitParent={handleSecondaryFormSubmit} isBlocked={secondFormBlocked} fabrics={fabrics}
                                 ></OrderFormSecondary>
                             </Grid.Column>
                             <Grid.Column width={9}>

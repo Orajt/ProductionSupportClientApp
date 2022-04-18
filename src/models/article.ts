@@ -38,6 +38,7 @@ export interface ArticleDetails {
     stuffId: number | null;
     stuffReactSelect: ReactSelectInt | null;
     stuffName: string;
+    fabricVariantGroupReactSelect: ReactSelectInt | null;
     fabricVariantGroupId: number | null;
     fabricVariantGroupName: string;
     price: number;
@@ -68,6 +69,7 @@ export class ArticleFormValues{
     stuffId: number | null=0;
     stuffReactSelect?: ReactSelectInt | null=null;
     stuffName: string="";
+    fabricVariantGroupReactSelect?: ReactSelectInt | null=null;
     fabricVariantGroupId: number | null=null;
     fabricVariantGroupName: string ="";
     length: number=0;

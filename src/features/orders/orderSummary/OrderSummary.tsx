@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Grid, Header, Table } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
@@ -11,13 +11,15 @@ import OrderSummaryClientRow from "./OrderSummaryClientRow";
 export default observer(function OrderSummary() {
 
     const { orderStore } = useStore();
-    const { getOrderSummary, orderSummary, loading } = orderStore;
+    const { getOrderSummary, orderSummary } = orderStore;
+    const [loading, setLoading]=useState(true);
 
     const { predicate } = useParams<{ predicate: string }>();
     const navigate = useNavigate();
     useEffect(() => {
+        setLoading(true);
         if (predicate) {
-            getOrderSummary(predicate).then(() => console.log(orderSummary));
+            getOrderSummary(predicate).then(()=>setLoading(false));
         }
     }, [getOrderSummary, predicate]);
 

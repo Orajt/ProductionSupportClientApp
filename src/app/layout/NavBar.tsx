@@ -25,30 +25,30 @@ export default observer(function NavBar() {
                                 <Dropdown.Item as={NavLink} to='/articles' name="ListArticles">Articles List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articles/form' name="ArticleForm">Create Article</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articleTypes' name="ArticleTypeList">Article type list</Dropdown.Item>
+                                <Dropdown item text='Article props'>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to='/stuffs' name="ListStuffs">Stuff list</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/stuffs/form' name="StuffForm">Create stuff</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/famillies' name="ListFamillies">Familly list</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/famillies/form' name="FamillyForm">Create familly</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/fabricVariants' name="ListFV">Fabric variant list</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/fabricVariants/form' name="FVForm">Create fabric variant</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/fabricVariantGroups' name="ListFVG">Variant group list</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/fabricVariantGroups/form' name="FVGForm">Create variant group</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </Dropdown.Menu>
                         </Dropdown>
                         <Dropdown item text='Companies'>
                             <Dropdown.Menu>
                                 <Dropdown.Item as={NavLink} to='/companies' name="ListCompanies">Companies List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/companies/form' name="CompanyForm">Create Company</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Dropdown item text='Delivery places'>
-                            <Dropdown.Menu>
-                                <Dropdown.Item as={NavLink} to='/deliveryPlaces' name="ListDeliveryPlaces">Delivery places List</Dropdown.Item>
-                                <Dropdown.Item as={NavLink} to='/deliveryPlaces/form' name="DeliveryPlaceForm">Create delivery place</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Dropdown item text='Stuffs'>
-                            <Dropdown.Menu>
-                                <Dropdown.Item as={NavLink} to='/stuffs' name="ListStuffs">Stuff list</Dropdown.Item>
-                                <Dropdown.Item as={NavLink} to='/stuffs/form' name="StuffForm">Create stuff</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Dropdown item text='Famillies'>
-                            <Dropdown.Menu>
-                                <Dropdown.Item as={NavLink} to='/famillies' name="ListFamillies">Familly list</Dropdown.Item>
-                                <Dropdown.Item as={NavLink} to='/famillies/form' name="FamillyForm">Create familly</Dropdown.Item>
+                                <Dropdown item text='Delivery places'>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item as={NavLink} to='/deliveryPlaces' name="ListDeliveryPlaces">Delivery places List</Dropdown.Item>
+                                        <Dropdown.Item as={NavLink} to='/deliveryPlaces/form' name="DeliveryPlaceForm">Create delivery place</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </Dropdown.Menu>
                         </Dropdown>
                         <Menu.Item position='right'>

@@ -27,7 +27,13 @@ import AssignStuffToArticleType from '../../features/articles/articleTypeForm/As
 import FamiliesList from '../../features/famillies/FamiliesList';
 import FamillyForm from '../../features/famillies/form/FamillyForm';
 import ArticlePdf from '../../features/ArticlePdf';
-import Gowno from '../common/Gowno';
+import OrderCalculationPdf from '../../features/orders/calculation/OrderCalculationPdf';
+import FabricVariantList from '../../features/fabricVariant/FabricVariantList';
+import FabricVariantForm from '../../features/fabricVariant/FabricVariantForm';
+import FabricVariantGroupForm from '../../features/fabricVarianGroup/form/FabricVariantGroupForm';
+import ImageHighResolution from '../../features/articles/ImageHighResolution';
+import FabricVariantGroupList from '../../features/fabricVarianGroup/FabricVariantGroupList';
+import FabricForm from '../../features/articles/FabricForm';
 
 function App() {
   const location=useLocation();
@@ -56,11 +62,14 @@ function App() {
           <Route key={location.key} path="orders/form" element={<OrderForm />} />
           <Route key={location.key} path="orders/form/:id" element={<OrderForm />} />
           <Route path="orders/summary/:predicate" element={<OrderSummary />} />
+          <Route path="orders/calculations/:orderId/:articleTypeId" element={<OrderCalculationPdf />} />
           {/* Articles */}
           <Route path="articles" element={<ArticleList />} />
           <Route path="articles/:id" element={<ArticleDetails />} />
           <Route path="articles/form" element={<ArticleForm />} />
           <Route path="articles/form/:id" element={<ArticleForm />} />
+          <Route path="fabrics/form" element={<FabricForm />} />
+          <Route path="fabrics/form/:id" element={<FabricForm />} />
           {/* Companies */}
           <Route path="companies" element={<CompaniesList />} />
           <Route path="companies/:id" element={<CompanyDetials />} />
@@ -90,9 +99,18 @@ function App() {
           <Route path="files/pdf/:id" element={<ArticlePdf />} />
 
            {/* Images */}
-           <Route path="images" element={<Gowno />} />
+           <Route path="images/:id" element={<ImageHighResolution />} />
 
-          <Route path="notFound" element={<NotFound />} />
+           {/* Fabric Variants*/}
+          <Route path="fabricVariants" element={<FabricVariantList />} />
+          <Route key={1} path="fabricVariants/form" element={<FabricVariantForm />} />
+          <Route key={2} path="fabricVariants/form/:id" element={<FabricVariantForm />} />
+
+          {/* Fabric Variant Groups*/}
+          <Route path="fabricVariantGroups" element={<FabricVariantGroupList />} />
+          <Route key={1} path="fabricVariantGroups/form" element={<FabricVariantGroupForm />} />
+
+          <Route path="not-found" element={<NotFound />} />
         </Route>
       </Routes>
  

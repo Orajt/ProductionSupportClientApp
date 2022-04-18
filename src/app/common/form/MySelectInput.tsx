@@ -10,7 +10,7 @@ interface Props {
     options: ReactSelectInt[];
     validateOnChaange: boolean;
     label?: string;
-    defaultSelected: number;
+    defaultSelected?: number;
     disabled?: boolean;
 }
 

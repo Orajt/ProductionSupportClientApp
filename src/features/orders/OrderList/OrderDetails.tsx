@@ -2,33 +2,40 @@ import axios from "axios";
 import { format } from "date-fns";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button, Grid, GridColumn, Header, Icon, Table } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 import { OrderPositionFormValues } from "../../../models/orders";
 import NotFound from "../../errors/NotFound";
 import OrderPositionTable from "./OrderPositionTable";
+import Select from "react-select"
 
 export default observer(function OrderDetails() {
 
-    const { orderStore } = useStore();
-    const { orderDetails, getOrderDetails, loading, ableToDeletePositions, deleteOrderPosition, handlePositionToRemove } = orderStore;
+    const { orderStore, articleStore } = useStore();
+    const { orderDetails, getOrderDetails, ableToDeletePositions, deleteOrderPosition, handlePositionToRemove } = orderStore;
+    const { getArticleTypesRS, articleTypesRS } = articleStore;
+
     const { id } = useParams<{ id: string }>();
+    const [loading, setLoading] = useState(true);
     const [deleteReally, setDeleteReally] = useState(false);
     const [wantDeleteOrder, setDeleteOrder] = useState(false);
+    const [wantToCalculate, setWantToCalculate] = useState(false);
+    const [articleTypeId, setArticleTypeId] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (id !== undefined && !isNaN(parseInt(id))) {
-            getOrderDetails(parseInt(id));
+            setLoading(true);
+            getOrderDetails(parseInt(id)).then(() => getArticleTypesRS(true)).finally(() => setLoading(false));
         }
-    }, [id, getOrderDetails]);
+    }, [id, getOrderDetails, getArticleTypesRS]);
 
-    function handleEdit(pos: OrderPositionFormValues) {}
-    function deleteOrder(){
-        axios.delete<void>(`order/${id}`,{}).then((response)=>{
-            if(response.status===200){
+    function handleEdit(pos: OrderPositionFormValues) { }
+    function deleteOrder() {
+        axios.delete<void>(`order/${id}`, {}).then((response) => {
+            if (response.status === 200) {
                 navigate('/orders');
             }
         })
@@ -68,12 +75,34 @@ export default observer(function OrderDetails() {
                 <Grid.Row>
                     <Button color="teal" onClick={() => navigate(`/orders/form/${orderDetails.id}`)}>Edit</Button>
                     <Button onClick={() => navigate(`/orders/summary/${orderDetails.id}`)}>OrderSummary</Button>
-                    {!wantDeleteOrder && <Button color="red" onClick={() => setDeleteOrder(true)}>Delete order</Button>}
-                    {wantDeleteOrder && 
+                    <Button color="olive" onClick={() => setWantToCalculate(!wantToCalculate)}>Calculate</Button>
+                </Grid.Row>
+                {wantToCalculate &&
                     <React.Fragment>
-                        <Button color="red" onClick={() => deleteOrder()}>Delete</Button>
-                        <Button color="orange" onClick={() => setDeleteOrder(false)}>Cancel</Button>
+                        <Grid.Row>
+                            <Header as="h4" color="teal">Select article type you want to calculate</Header>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Select
+                                options={articleTypesRS}
+                                value={articleTypesRS.filter(option =>
+                                    option.value === articleTypeId)}
+                                onChange={(d) => {
+                                    setArticleTypeId(d!.value);
+                                }}
+                                placeholder={"Choose Article Type"}
+                            />
+                            <Link to={`/orders/calculations/${orderDetails.id}/${articleTypeId}`}><Button positive>Apply</Button></Link>
+                        </Grid.Row>
                     </React.Fragment>}
+
+                <Grid.Row>
+                    {!wantDeleteOrder && <Button color="red" onClick={() => setDeleteOrder(true)}>Delete order</Button>}
+                    {wantDeleteOrder &&
+                        <React.Fragment>
+                            <Button color="red" onClick={() => deleteOrder()}>Delete</Button>
+                            <Button color="orange" onClick={() => setDeleteOrder(false)}>Cancel</Button>
+                        </React.Fragment>}
 
                 </Grid.Row>
                 <GridColumn width={3}>

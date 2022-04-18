@@ -10,6 +10,7 @@ import { Article, ArticleDetails, ArticleTypeDetails } from '../../models/articl
 import {  StuffFormValues, StuffListItem, StuffListToSelect } from '../../models/stuff';
 import { CompanyDetails, CompanyFormValues, CompanyListItem } from '../../models/company';
 import { DeliveryPlaceDetails, DeliveryPlaceFormValues, DeliveryPlaceListItem } from '../../models/deliveryPlace';
+import { FabricVariantDetails, FabricVariantGroupDetails } from '../../models/fabricVariant';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -135,7 +136,14 @@ const Files ={
     listRS:(type: string)=>requests.get<ReactSelectInt[]>(`/file/list/reactSelect/${type}`),
     getArticlePdf: (id: number)=>requests.get<Blob>(`/file/${id}`)
 };
-
+const FabricVariants={
+    list: () => requests.get<FabricVariantDetails[]>(`/fabricVariant`),
+    listReactSelect: () => requests.get<ReactSelectInt[]>(`/fabricVariant/list/reactSelect`),
+    details: (id: string)=>requests.get<FabricVariantDetails>(`/fabricVariant/${id}`),   
+    listReactSelectFVG: (id: number) => requests.get<ReactSelectInt[]>(`/fabricVariantGroup/list/${id}`),
+    detailsFVG: (id: string)=>requests.get<FabricVariantGroupDetails>(`/fabricVariantGroup/${id}`),
+    detailsFVGByArtId: (id: number)=>requests.get<FabricVariantGroupDetails>(`/fabricVariantGroup/details/byArticle/${id}`),
+}
 
 
 const agent = {
@@ -147,7 +155,8 @@ const agent = {
     Families,
     Stuffs,
     Companies,
-    Files
+    Files,
+    FabricVariants
 }
 
 export default agent;

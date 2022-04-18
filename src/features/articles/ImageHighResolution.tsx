@@ -1,17 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { List, Image, Popup, Header } from "semantic-ui-react";
+import { useParams } from "react-router-dom";
+import { Image, Header } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import NotFound from "../errors/NotFound";
 
-interface Props {
-    fileName: string;
-}
 
-export default function ImageHighResolution({ fileName }: Props) {
+export default function ImageHighResolution() {
 
     const [loading, setLoading] = useState(true);
     const [file, setFile] = useState<File | null>(null);
+    
+    const { id : fileName } = useParams<{ id: string }>();
 
     useEffect(() => {
         try {

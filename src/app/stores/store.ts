@@ -3,6 +3,7 @@ import ArticleStore from "./articleStore";
 import CommonStore from "./commonStore";
 import CompanyStore from "./companyStore";
 import DeliveryPlaceStore from "./deliveryPlaceStore";
+import FabricVariantStore from "./fabricVariantStore";
 import FamillyStore from "./famillyStore";
 import FileStore from "./fileStore";
 import ModalStore from "./modalStore";
@@ -23,6 +24,7 @@ interface Store {
     companyStore: CompanyStore;
     orderPositionStore: OrderPositionStore;
     fileStore: FileStore;
+    fabricVariantStore: FabricVariantStore;
 }
 
 export const store: Store = {
@@ -37,6 +39,7 @@ export const store: Store = {
     companyStore: new CompanyStore(),
     orderPositionStore: new OrderPositionStore(),
     fileStore: new FileStore(),
+    fabricVariantStore: new FabricVariantStore(),
 }
 
 export const StoreContext = createContext(store);

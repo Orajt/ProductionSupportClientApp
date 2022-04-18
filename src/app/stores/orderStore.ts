@@ -32,14 +32,12 @@ export default class OrderStore {
             this.loading = true;
             this.clear();
             let queryString=Utilities.createFilterQueryString(filters);
-            console.log(queryString);
             queryString.append('pageNumber', this.pagingParams.pageNumber.toString());
             queryString.append('pageSize', this.pagingParams.pageSize.toString());
             const result = await agent.Order.getList(queryString);
             result.data.forEach(orderListElem => {
                 this.setOrder(orderListElem);
             })
-            console.log(this.orderList);
             this.setPagination(result.pagination);
             this.setLoading(false);
         }catch (error) {
@@ -71,18 +69,14 @@ export default class OrderStore {
         try{
             const orderSummary = await agent.Order.orderSummary(predicate);
             runInAction(()=>{
-                console.log("To ja order summary")
                 orderSummary.productionDate=new Date(orderSummary.productionDate);
                 orderSummary.shipmentDate=new Date(orderSummary.shipmentDate);
                 orderSummary.editDate=new Date(orderSummary.editDate);
-                console.log(orderSummary);
-                this.orderSummary=orderSummary;
-                
+                this.orderSummary=orderSummary; 
             })
         }catch(error){
             console.log(error);
         }finally{
-            console.log(this.orderSummary);
             this.setLoading(false);
         }
     }
@@ -96,7 +90,6 @@ export default class OrderStore {
         this.orderPositionsToRemove = this.orderPositionsToRemove.filter(x => x !== id);
         if (!this.orderPositionsToRemove.some(x => x))
             this.setAbleToDelete(false);
-        console.log(this.ableToDeletePositions);
     }
     deleteOrderPosition = async () => {
         try {

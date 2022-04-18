@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Header, Icon, Pagination, PaginationProps, Table } from "semantic-ui-react";
 import BooleanDropdown from "../../../app/common/filters/BooleanDropdown";
-import BooleanFilter from "../../../app/common/filters/BooleanFilter";
 import DateFilter from "../../../app/common/filters/DateFilter";
 import NumberFilter from "../../../app/common/filters/NumberFilter";
 import StringFilter from "../../../app/common/filters/StringFilter";
@@ -39,7 +38,6 @@ export default observer(function OrderList() {
             newFilters.push(filter);
         }
         setFilters(newFilters);
-        console.log(newFilters);
     }
     function clearAllFilters(){
         setLoading(true);

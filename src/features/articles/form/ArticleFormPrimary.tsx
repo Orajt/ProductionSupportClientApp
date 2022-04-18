@@ -1,6 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
-import { Button, FormGroup, Grid, Header } from "semantic-ui-react";
+import { Button, FormGroup, Grid } from "semantic-ui-react";
 import Select from "react-select"
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { ReactSelectInt } from "../../../models/reactSelect";
@@ -14,14 +14,13 @@ import { useStore } from "../../../app/stores/store";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 interface Props {
-    title: string;
     articleTypes: ReactSelectInt[];
     initialValues: ArticleFormValues;
     handleFormSubmit: (values: ArticleFormValues) => void;
     editMode: boolean;
 }
 
-export default observer(function ArticleFormPrimary({ title, articleTypes, initialValues, editMode, handleFormSubmit: handleParentFormSubmit }: Props) {
+export default observer(function ArticleFormPrimary({ articleTypes, initialValues, editMode, handleFormSubmit: handleParentFormSubmit }: Props) {
 
     ////////////////////Validation////////////////////////////////////
     const validationSchema = Yup.object({
@@ -46,6 +45,16 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
                 return true;
             })
         }).nullable(),
+        fabricVariantGroupReactSelect: Yup.object().shape({
+            value: Yup.number().nullable().test('fvgIsRequired', 'Fabric variant group is required', function (value) {
+                if (!value)
+                    return true;
+                if (value && value !== fvgId) {
+                    setFvgId(value!);
+                }
+                return true;
+            })
+        }).nullable(),
         length: Yup.number().integer().min(0),
         width: Yup.number().integer().min(0),
         high: Yup.number().integer().min(0),
@@ -61,7 +70,6 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
             if (field === nameToCheck && nameError.length > 0) return nameError;
         }
         setName(field);
-        console.log(nameToCheck)
         const params = new URLSearchParams();
         params.append('articleTypeId', `${articleTypeId.toString()}`);
         params.append('stuffId', `${stuffId.toString()}`);
@@ -82,25 +90,25 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
     function additionalValidation() {
         if (articleTypeId === 0)
             return false;
-        if (articleTypeId === 1 || articleTypeId === 3) {
-            if (famillyId == 0) {
-                setFamillyError(true)
+        if(articleTypeId===1){
+            if(famillyId===0 || fvgId===0)
                 return false;
-            }
+        }
+        if (articleTypeId === 3) {
+            return true;
         }
         if (articleTypeId === 2 || articleTypeId === 4) {
-            if (stuffId == 0) {
-                setStuffError(true)
+            if (stuffId === 0)
                 return false;
-            }
         }
         return true;
     }
 
     //////Stores//////////
-    const { famillyStore, stuffStore } = useStore();
+    const { famillyStore, stuffStore, fabricVariantStore } = useStore();
     const { familiesRS, getFamiliesRS } = famillyStore;
     const { getStuffsListToSelect, stuffRS } = stuffStore;
+    const { getListReactSelectFVG, fabricVariantGroupListRS} = fabricVariantStore;
 
     //////Local state///////////
     const [initialFormValues, setInitialFormValues] = useState(new ArticleFormValues());
@@ -108,14 +116,13 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
     const [articleTypeId, setArticleTypeId] = useState(initialValues.articleTypeId);
     const [stuffId, setStuffId] = useState(initialValues.stuffId === null ? 0 : initialValues.stuffId);
     const [famillyId, setFamillyId] = useState(initialValues.famillyId === null ? 0 : initialValues.famillyId);
+    const [fvgId, setFvgId] = useState(initialValues.fabricVariantGroupId === null ? 0 : initialValues.fabricVariantGroupId);
     const [initialRender, setInitialRender] = useState(false);
     const [loading, setLoading] = useState(true);
     const [stuffList, setStuffList] = useState<ReactSelectInt[]>([]);
-    const [gowno, setGowno] = useState("");
+
     ///Errrors////
     const [nameError, setNameError] = useState('');
-    const [famillyError, setFamillyError] = useState(true);
-    const [stuffError, setStuffError] = useState(true);
 
     ///Field block////
     const [famillyFieldBlocked, setFamillyFieldBlocked] = useState(false);
@@ -126,17 +133,21 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
         setFamillyFieldBlocked(false);
         setStuffFieldBlocked(false);
         setFabicVariantFieldBlocked(false);
-        if (articleTypeIdToCheck === 1 || articleTypeIdToCheck === 3) {
-            if (famillyId === 0)
-                setFamillyError(true);
-            setStuffError(false);
+        if (articleTypeIdToCheck === 1) {
             setStuffId(0);
             setStuffFieldBlocked(true);
         }
+        if (articleTypeIdToCheck === 3) {
+            setStuffId(0);
+            setFamillyId(0);
+            setFvgId(0);
+            setStuffFieldBlocked(true);
+            setFamillyFieldBlocked(true);
+            setFabicVariantFieldBlocked(true);
+        }
         if (articleTypeIdToCheck === 2 || articleTypeIdToCheck === 4) {
-            if (stuffId === 0)
-                setStuffError(true);
-            setFamillyError(false);
+            setFamillyId(0);
+            setFvgId(0);
             setFamillyFieldBlocked(true);
             setFabicVariantFieldBlocked(true);
         }
@@ -145,8 +156,6 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
 
     useEffect(() => {
         if (editMode && !initialRender) {
-            setFamillyError(false);
-            setStuffError(false);
             blockFields(initialValues.articleTypeId);
             setArticleTypeId(initialValues.articleTypeId);
             setName(initialValues.fullName);
@@ -162,6 +171,7 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
                     if (value)
                         setStuffList(value);
                 })
+                .then(()=>getListReactSelectFVG(0))
                 .finally(() => {
                     setLoading(false);
                     setInitialRender(true);
@@ -207,18 +217,23 @@ export default observer(function ArticleFormPrimary({ title, articleTypes, initi
                         <MyTextInput placeholder={"Name without familly"} name="nameWithoutFamilly" label="Name without familly"></MyTextInput>
                         <MySelectInput label="Select familly" validateOnChaange={true} options={familiesRS}
                             placeholder='Choose familly' name='famillyReactSelect'
-                            defaultSelected={!famillyFieldBlocked ? initialFormValues.famillyId! : 0}
+                            defaultSelected={!famillyFieldBlocked ? initialFormValues.famillyId! : undefined}
                             disabled={famillyFieldBlocked} />
-                        {famillyId === 0 && !famillyFieldBlocked && <MyErrorMessage errorMessage={"Familly is required"} />}
+                         {famillyId === 0 && !famillyFieldBlocked && <MyErrorMessage errorMessage={"Familly is required"} />}
+                        <MySelectInput label="Select fabric variant group" validateOnChaange={true} options={fabricVariantGroupListRS!}
+                            placeholder='Choose fabric variant group' name='fabricVariantGroupReactSelect'
+                            defaultSelected={!fabicVariantFieldBlocked ? initialFormValues.fabricVariantGroupId! : undefined}
+                            disabled={famillyFieldBlocked || editMode} />
+                        {fvgId === 0 && !fabicVariantFieldBlocked && <MyErrorMessage errorMessage={"Variant group is required"} />}
                         <MySelectInput label="Select stuff" validateOnChaange={true} options={stuffList}
                             placeholder='Choose stuff' name='stuffReactSelect'
-                            defaultSelected={initialFormValues.stuffId!}
+                            defaultSelected={initialFormValues.stuffId ? initialFormValues.stuffId : undefined}
                             disabled={stuffFieldBlocked} />
                         {stuffId === 0 && !stuffFieldBlocked && <MyErrorMessage errorMessage={"Stuff is required"} />}
                         <FormGroup>
-                        <MyTextInput placeholder={"Length"} name={"length"} label="Length"></MyTextInput>
-                        <MyTextInput placeholder={"Width"} name={"width"} label="Width"></MyTextInput>
-                        <MyTextInput placeholder={"High"} name={"high"} label="High"></MyTextInput>
+                            <MyTextInput placeholder={"Length"} name={"length"} label="Length"></MyTextInput>
+                            <MyTextInput placeholder={"Width"} name={"width"} label="Width"></MyTextInput>
+                            <MyTextInput placeholder={"High"} name={"high"} label="High"></MyTextInput>
                         </FormGroup>
                         <label className="boldFont">Created in company</label>
                         <Field type="checkbox" name="createdInCompany" />

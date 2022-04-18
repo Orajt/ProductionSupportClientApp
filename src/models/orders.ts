@@ -1,4 +1,5 @@
 import OrderDetails from "../features/orders/OrderList/OrderDetails";
+import { FabricVariantToSetInOrder } from "./fabricVariant";
 import { ReactSelectInt } from "./reactSelect";
 
 export interface OrderListElem {
@@ -50,6 +51,7 @@ export class OrderPositionFormValues{
     client:string="";
     setId:number=0;
     index?:number;
+    fabricRealization?: FabricVariantToSetInOrder[]=[];
 }
 export interface OrderSummaryPosition{
     setName: string;

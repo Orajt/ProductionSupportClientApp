@@ -22,7 +22,6 @@ export default observer(function ArticleForm() {
     ///////////////////////STORES//////////////////////////////////
     const { articleStore, modalStore } = useStore();
     const { getArticleTypesRS, articleTypesRS, getArticleDetails, clear } = articleStore;
-    const { closeModal } = modalStore;
 
     ////////////////ROUTE PARAMS//////////////////////////////////////
     const { id } = useParams<{ id: string }>();
@@ -63,7 +62,6 @@ export default observer(function ArticleForm() {
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(saveAndSeeDetails: boolean) {
-        console.log(article);
         setLoading(true)
         if (editMode) {
             axios.put<void>(`/article/${id}`, article).then((response) => {
@@ -93,7 +91,6 @@ export default observer(function ArticleForm() {
         setLoading(false);
     }
     function handlePrimaryFormSubmit(values: ArticleFormValues) {
-        console.log("Nakurwiam");
         let newArticle = {
             ...values
         }
@@ -101,6 +98,8 @@ export default observer(function ArticleForm() {
             newArticle.famillyId = values.famillyReactSelect.value;
         if (values.stuffReactSelect)
             newArticle.stuffId = values.stuffReactSelect.value;
+        if (values.fabricVariantGroupReactSelect)
+            newArticle.fabricVariantGroupId = values.fabricVariantGroupReactSelect.value;
         if (values.articleTypeReactSelect)
             newArticle.articleTypeId = values.articleTypeReactSelect.value;
         newArticle.childArticles = [...article.childArticles];
@@ -184,7 +183,7 @@ export default observer(function ArticleForm() {
                         <Grid>
                             <Grid.Row>
                                 <GridColumn width="7">
-                                    <ArticleFormPrimary title={title} articleTypes={articleTypesRS}
+                                    <ArticleFormPrimary articleTypes={articleTypesRS}
                                         initialValues={article} handleFormSubmit={handlePrimaryFormSubmit} editMode={editMode}></ArticleFormPrimary>
                                 </GridColumn>
                                 <GridColumn width="9">

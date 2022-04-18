@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Image, Popup } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Image} from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import NotFound from "../errors/NotFound";
-import ImageHighResolution from "./ImageHighResolution";
 
 interface Props {
     fileName: string;
@@ -35,17 +35,7 @@ export default function ArticleDetailsImage({ fileName, id }: Props) {
     if (file === null) return <NotFound></NotFound>
     return (
         <>
-            <Popup
-                hoverable
-                key={id}
-                trigger={
-                    <Image src={URL.createObjectURL(file)}></Image>
-                }
-            >
-                <Popup.Content>
-                    <ImageHighResolution fileName={fileName}></ImageHighResolution>
-                </Popup.Content>
-            </Popup>
+            <Link to={`/images/${fileName}`}><Image src={URL.createObjectURL(file)}></Image></Link>
         </>
     )
 }
