@@ -58,6 +58,7 @@ export default observer(function ArticleDetails() {
                                 <Button color="red" size="large" onClick={() => deleteArticle()}>Delete</Button>
                                 <Button color="orange" size="large" onClick={() => setDeleteReally(false)}>Cancell</Button>
                             </div>}
+                        {articleDetails.articleTypeId===1 && <Button onClick={()=>navigate(`/articles/realizations/${articleDetails.id}`)}>Manage fabric realizations</Button>}
                     </Grid.Row>
                     <Accordion>
                         <Accordion.Title

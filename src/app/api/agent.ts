@@ -11,6 +11,7 @@ import {  StuffFormValues, StuffListItem, StuffListToSelect } from '../../models
 import { CompanyDetails, CompanyFormValues, CompanyListItem } from '../../models/company';
 import { DeliveryPlaceDetails, DeliveryPlaceFormValues, DeliveryPlaceListItem } from '../../models/deliveryPlace';
 import { FabricVariantDetails, FabricVariantGroupDetails } from '../../models/fabricVariant';
+import { ArticleFabricRealizationDetails } from '../../models/articleFabricRealization';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -124,6 +125,7 @@ const Stuffs ={
     details: (id: number)=>requests.get<StuffListItem>(`/stuff/${id}`),
     create:(stuff: StuffFormValues) => requests.post<void>(`/company`, stuff),
     edit:(stuff: StuffFormValues) => requests.put<void>(`/company/${stuff.id}`, stuff), 
+    getReactSelectByArticleType: (articleTypeId: number)=>requests.get<ReactSelectInt[]>(`/stuff/list/reactSelect/${articleTypeId}`)
 }
 const Companies={
     list: () => requests.get<CompanyListItem[]>(`/company`),
@@ -144,6 +146,9 @@ const FabricVariants={
     detailsFVG: (id: string)=>requests.get<FabricVariantGroupDetails>(`/fabricVariantGroup/${id}`),
     detailsFVGByArtId: (id: number)=>requests.get<FabricVariantGroupDetails>(`/fabricVariantGroup/details/byArticle/${id}`),
 }
+const FabricRealizations={
+    details: (id: number) => requests.get<ArticleFabricRealizationDetails>(`/articleFabricRealization/${id}`),
+}
 
 
 const agent = {
@@ -156,7 +161,8 @@ const agent = {
     Stuffs,
     Companies,
     Files,
-    FabricVariants
+    FabricVariants,
+    FabricRealizations
 }
 
 export default agent;

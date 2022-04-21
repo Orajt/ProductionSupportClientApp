@@ -37,6 +37,16 @@ export default observer(function OrderFormSecondary({ articleTypeId, handleFormS
     const [errorGroupFabric, setErrorGroupFabric] = useState(false);
     const [selectedArticle, setSelectedArticle] = useState<ReactSelectInt | null>(null);
     const initialValues = new OrderPositionFormValues();
+
+    useEffect(() => {
+        if (articleTypeId !== 1) {
+            setErrorFabrics(false);
+            setErrorGroupFabric(false);
+        }
+        setLoading(true)
+        getArticlesRS(articleTypeId, true).then(() => setLoading(false));
+    }, [getArticlesRS, articleTypeId, fabrics]);
+
     const validationSchema = Yup.object({
         articleRS: Yup.object().shape({
             value: Yup.number().nullable().test('articleIsRequired', 'Article is required', function (value) {
@@ -164,14 +174,6 @@ export default observer(function OrderFormSecondary({ articleTypeId, handleFormS
         fabricVariantToChaange.group = parseInt(field);
         createGroups(newFabricVariants);
     }
-    useEffect(() => {
-        if (articleTypeId !== 1) {
-            setErrorFabrics(false);
-            setErrorGroupFabric(false);
-        }
-        setLoading(true)
-        getArticlesRS(articleTypeId, true).then(() => setLoading(false));
-    }, [getArticlesRS, articleTypeId, fabrics]);
 
     function createGroups(variants: FabricVariantToSetInOrder[]) {
         let groupedArray = [] as GroupedVariants[];

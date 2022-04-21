@@ -10,11 +10,12 @@ import { OrderPositionFormValues } from "../../../models/orders";
 import NotFound from "../../errors/NotFound";
 import OrderPositionTable from "./OrderPositionTable";
 import Select from "react-select"
+import { toast } from "react-toastify";
 
 export default observer(function OrderDetails() {
 
     const { orderStore, articleStore } = useStore();
-    const { orderDetails, getOrderDetails, ableToDeletePositions, deleteOrderPosition, handlePositionToRemove } = orderStore;
+    const { orderDetails, getOrderDetails, ableToDeletePositions, deleteOrderPosition, handlePositionToRemove, toogleOrderDone } = orderStore;
     const { getArticleTypesRS, articleTypesRS } = articleStore;
 
     const { id } = useParams<{ id: string }>();
@@ -37,6 +38,15 @@ export default observer(function OrderDetails() {
         axios.delete<void>(`order/${id}`, {}).then((response) => {
             if (response.status === 200) {
                 navigate('/orders');
+            }
+        })
+    }
+    function orderDone()
+    {
+        axios.post<void>(`order/${id}`,{}).then((response)=>{
+            if (response.status === 200) {
+                toast.success("Succesfully change order");
+                toogleOrderDone();
             }
         })
     }
@@ -82,7 +92,7 @@ export default observer(function OrderDetails() {
                         <Grid.Row>
                             <Header as="h4" color="teal">Select article type you want to calculate</Header>
                         </Grid.Row>
-                        <Grid.Row>
+                        <Grid.Row className="ui-form">
                             <Select
                                 options={articleTypesRS}
                                 value={articleTypesRS.filter(option =>
@@ -95,8 +105,8 @@ export default observer(function OrderDetails() {
                             <Link to={`/orders/calculations/${orderDetails.id}/${articleTypeId}`}><Button positive>Apply</Button></Link>
                         </Grid.Row>
                     </React.Fragment>}
-
                 <Grid.Row>
+                    <Button onClick={()=>orderDone()}>Mark as {orderDetails.done ? "undone" : "done"}</Button>
                     {!wantDeleteOrder && <Button color="red" onClick={() => setDeleteOrder(true)}>Delete order</Button>}
                     {wantDeleteOrder &&
                         <React.Fragment>

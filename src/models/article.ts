@@ -1,9 +1,9 @@
 import { ReactSelectInt } from "./reactSelect";
-import { StuffListItem, StuffListToSelect } from "./stuff";
 
 export interface Article{
     id: number;
     fullName:string;
+    articleTypeId:number;
     articleTypeName: string;
     famillyName: string;
     stuffName: string;

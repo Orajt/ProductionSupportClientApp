@@ -50,7 +50,10 @@ export default observer(function OrderSummary() {
                         </Table>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row><Button positive onClick={() => navigate(`/orders/form/${orderSummary.id}`)}>Edit</Button></Grid.Row>
+                <Grid.Row>
+                    <Button positive onClick={() => navigate(`/orders/form/${orderSummary.id}`)}>Edit</Button>
+                    <Button onClick={() => navigate(`/orders/${orderSummary.id}`)}>Back to details</Button>
+                </Grid.Row>
                 <Grid.Row>
                     <Table celled>
                         <Table.Header>

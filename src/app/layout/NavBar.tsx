@@ -24,6 +24,7 @@ export default observer(function NavBar() {
                             <Dropdown.Menu>
                                 <Dropdown.Item as={NavLink} to='/articles' name="ListArticles">Articles List</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articles/form' name="ArticleForm">Create Article</Dropdown.Item>
+                                <Dropdown.Item as={NavLink} to='/fabrics/form' name="ArticleForm">Create Fabric</Dropdown.Item>
                                 <Dropdown.Item as={NavLink} to='/articleTypes' name="ArticleTypeList">Article type list</Dropdown.Item>
                                 <Dropdown item text='Article props'>
                                     <Dropdown.Menu>

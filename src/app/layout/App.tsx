@@ -34,6 +34,7 @@ import FabricVariantGroupForm from '../../features/fabricVarianGroup/form/Fabric
 import ImageHighResolution from '../../features/articles/ImageHighResolution';
 import FabricVariantGroupList from '../../features/fabricVarianGroup/FabricVariantGroupList';
 import FabricForm from '../../features/articles/FabricForm';
+import ManageArtacleFabricRealization from '../../features/articles/manageFabricRealization/ManageArtacleFabricRealization';
 
 function App() {
   const location=useLocation();
@@ -109,6 +110,10 @@ function App() {
           {/* Fabric Variant Groups*/}
           <Route path="fabricVariantGroups" element={<FabricVariantGroupList />} />
           <Route key={1} path="fabricVariantGroups/form" element={<FabricVariantGroupForm />} />
+
+          {/*Article Fabric realization */}
+          <Route path="articles/realizations/:id" element={<ManageArtacleFabricRealization />} />
+          
 
           <Route path="not-found" element={<NotFound />} />
         </Route>

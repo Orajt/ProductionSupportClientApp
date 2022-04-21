@@ -82,7 +82,7 @@ export default observer(function ArticleForm() {
                         navigate(`/articles/${article.fullName}`);
                         return;
                     }
-                    setArticle(new ArticleFormValues());
+                    setSecondStep(false);
                     toast.success("Article create successfully");
                     return;
                 }

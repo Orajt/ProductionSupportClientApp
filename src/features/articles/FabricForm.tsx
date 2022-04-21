@@ -92,7 +92,7 @@ export default observer(function FabricForm() {
         <Grid>
             <Grid.Column width="8">
                 <Grid.Row>
-                    <Header as="h2">{title}</Header>
+                    <Header color="teal" as="h2">{title}</Header>
                 </Grid.Row>
                 <Grid.Row>
                     <Formik

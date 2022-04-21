@@ -137,6 +137,9 @@ export default class OrderStore {
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
     }
+    toogleOrderDone = ()=>{
+        this.orderDetails!.done=!this.orderDetails!.done;
+    }
     private setAbleToDelete(isAble: boolean) {
         this.ableToDeletePositions = isAble;
     }

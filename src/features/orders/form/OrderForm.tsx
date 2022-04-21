@@ -53,7 +53,6 @@ export default observer(function OrderForm() {
                 .then((val)=>{
                     if(val)
                         setFabrics(val);
-                    console.log(val);
                 })
                 .finally(() => { setTitle(`Edit order ${order.name}`); setEditMode(true); setLoading(false); });
 
@@ -75,7 +74,6 @@ export default observer(function OrderForm() {
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(){
-        console.log(order);
         setLoading(true)
         if(editMode){
             axios.put<void>(`/order/${id}`, order).then((response)=>{
@@ -96,8 +94,6 @@ export default observer(function OrderForm() {
         setLoading(false);
     }
     function handlePrimaryFormSubmit(values: OrderFormValues) {
-        console.log("Primary form");
-        console.log(values);
         let newOrder = {
             ...values
         }
@@ -107,8 +103,6 @@ export default observer(function OrderForm() {
         setSomeChaanges(true);
     }
     function handleSecondaryFormSubmit(values: OrderPositionFormValues) {
-        console.log("To chcę dodać kurwa")
-        console.log(values);
         let newOrderPositions = [
             ...order.orderPositions
         ]
@@ -122,8 +116,6 @@ export default observer(function OrderForm() {
         newOrder.orderPositions.sort(function (a: OrderPositionFormValues, b: OrderPositionFormValues) {
             return a.client.localeCompare(b.client) || a.setId - b.setId || a.lp - b.lp;
         })
-        console.log("A to wychodzi")
-        console.log(newOrder);
         setOrder(newOrder);
         setSomeChaanges(true);
     }
