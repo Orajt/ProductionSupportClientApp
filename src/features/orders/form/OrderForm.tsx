@@ -1,7 +1,7 @@
 import axios from "axios";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Select from "react-select"
 import { Button, Grid, GridColumn, Header, Segment } from "semantic-ui-react";
@@ -28,6 +28,7 @@ export default observer(function OrderForm() {
     ////////////////ROUTE PARAMS//////////////////////////////////////
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
 
     ////////////////LOCAL STATE//////////////////////////////////////
     const [order, setOrder] = useState<OrderFormValues>(new OrderFormValues());

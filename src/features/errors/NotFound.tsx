@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Header, Icon, Segment } from 'semantic-ui-react';
-import { useStore } from '../../app/stores/store';
 
 export default function NotFound() {
     return (  
