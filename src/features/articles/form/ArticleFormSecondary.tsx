@@ -1,7 +1,6 @@
-import { Field, Form, Formik} from "formik";
+import { Form, Formik} from "formik";
 import { useEffect, useState } from "react";
 import { Button, Header } from "semantic-ui-react";
-import { OrderPosition, OrderPositionFormValues } from "../../../models/orders";
 import * as Yup from 'yup';
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../app/stores/store";

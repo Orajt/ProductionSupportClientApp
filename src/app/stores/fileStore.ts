@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable} from "mobx";
 import agent from "../api/agent";
 
 export default class FileStore {

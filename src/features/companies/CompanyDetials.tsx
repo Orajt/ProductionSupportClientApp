@@ -15,8 +15,6 @@ export default observer(function CompanyDetials() {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
-    const [deleteReally, setDeleteReally] = useState(false);
-    const [wantDeleteOrder, setDeleteOrder] = useState(false);
 
     useEffect(() => {
         setLoading(true);
@@ -24,14 +22,6 @@ export default observer(function CompanyDetials() {
             getCompanyDetails(id).then(() => setLoading(false));
         }
     }, [id, getCompanyDetails]);
-
-    // function deleteOrder(){
-    //     axios.delete<void>(`order/${id}`,{}).then((response)=>{
-    //         if(response.status===200){
-    //             navigate('/orders');
-    //         }
-    //     })
-    // }
 
     if (loading) return <LoadingComponent content="loading"></LoadingComponent>;
     if (companyDetails === null) return <NotFound></NotFound>

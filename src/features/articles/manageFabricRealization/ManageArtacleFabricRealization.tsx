@@ -9,7 +9,6 @@ import { ReactSelectInt } from "../../../models/reactSelect";
 import NotFound from "../../errors/NotFound";
 import Select from "react-select"
 import MyErrorMessage from "../../../app/common/form/MyErrorMessage";
-import { parse } from "path/posix";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -56,7 +55,7 @@ export default observer(function ManageArtacleFabricRealization() {
             return;
         }
         newVariantList[variantIndex - 1].value = parsedValue;
-        if (newVariantList.some(p => p.value == 1))
+        if (newVariantList.some(p => p.value === 1))
             setValueError(false);
         validation(undefined);
     }

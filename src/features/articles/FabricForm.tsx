@@ -24,7 +24,6 @@ export default observer(function FabricForm() {
     })
     ////////////////ROUTE PARAMS//////////////////////////////////////
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
 
     //////Stores//////////
     const { stuffStore, articleStore } = useStore();
@@ -65,7 +64,7 @@ export default observer(function FabricForm() {
                 })
                 .then(() => setLoading(false))
         }
-    }, [getStuffsListToSelect, getArticleDetails]);
+    }, [getStuffsListToSelect, getArticleDetails, id]);
 
     function handleFormSubmit(values: ArticleFormValues) {
         let fabric={...values};

@@ -57,7 +57,7 @@ export default observer(function OrderFormSecondary({ articleTypeId, handleFormS
                     setGroupedVariants([]);
                     setFabricVariants([]);
                 }
-                if (articleTypeId == 1 && value && value !== articleId) {
+                if (articleTypeId === 1 && value && value !== articleId) {
                     setArticleId(value!);
                     setLoading(true);
                     getFabricVariantGroupByArticleId(value).then((val) => {
@@ -103,7 +103,7 @@ export default observer(function OrderFormSecondary({ articleTypeId, handleFormS
             setFabricVariants([]);
             return;
         }
-        if (articleTypeId == 1 && selected && selected.value !== articleId) {
+        if (articleTypeId === 1 && selected && selected.value !== articleId) {
             setArticleId(selected.value!);
             setLoading(true);
             getFabricVariantGroupByArticleId(selected.value).then((val) => {

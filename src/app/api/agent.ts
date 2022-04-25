@@ -13,11 +13,11 @@ import { DeliveryPlaceDetails, DeliveryPlaceFormValues, DeliveryPlaceListItem } 
 import { FabricVariantDetails, FabricVariantGroupDetails } from '../../models/fabricVariant';
 import { ArticleFabricRealizationDetails } from '../../models/articleFabricRealization';
 
-const sleep = (delay: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay)
-    })
-}
+// const sleep = (delay: number) => {
+//     return new Promise((resolve) => {
+//         setTimeout(resolve, delay)
+//     })
+// }
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 

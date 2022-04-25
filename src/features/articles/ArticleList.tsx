@@ -88,7 +88,7 @@ export default observer(function ArticleList() {
                             <Table.Cell>{format(article.createDate, 'dd MMM yyyy')}</Table.Cell>
                             <Table.Cell>{format(article.editDate, 'dd MMM yyyy')}</Table.Cell>
 
-                            {article.articleTypeId!=6 ? 
+                            {article.articleTypeId!==6 ? 
                             <Table.Cell>
                                 <Link to={`/articles/${article.id}`}><Button content="Details" /></Link>
                             </Table.Cell> :

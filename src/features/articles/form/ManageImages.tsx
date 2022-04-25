@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone'
-import { Button, Grid, Header, List, ListContent, Image } from "semantic-ui-react";
+import { Button, Grid, Header, List, Image } from "semantic-ui-react";
 import styled from 'styled-components';
 import Select from "react-select"
 import { useStore } from "../../../app/stores/store";
@@ -108,8 +108,6 @@ export default function ManageImages({ articleId, images }: Props) {
         }
     }
     function deleteSelectedOption(fileName: string) {
-        console.log("nakurwiam")
-        console.log(fileName);
         let newOptions = selectedOptions.filter(p => p !== fileName);
         console.log(newOptions);
         setSelectedOptions(newOptions);
@@ -118,8 +116,6 @@ export default function ManageImages({ articleId, images }: Props) {
         var formData = new FormData();
         if (files && files.length > 0) {
             files.forEach(file => {
-                console.log("-------------------")
-                console.log(file);
                 formData.append("files", file!, file!.name);
             });
         }

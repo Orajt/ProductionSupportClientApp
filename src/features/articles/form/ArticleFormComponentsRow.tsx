@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect} from "react";
-import { Button, Checkbox, CheckboxProps, Table } from "semantic-ui-react";
+import { Checkbox, CheckboxProps, Table } from "semantic-ui-react";
 import { ArticlePositionFormValues } from "../../../models/article";
 
 interface IProps {

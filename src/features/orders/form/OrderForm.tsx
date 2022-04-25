@@ -28,7 +28,6 @@ export default observer(function OrderForm() {
     ////////////////ROUTE PARAMS//////////////////////////////////////
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const location = useLocation();
 
     ////////////////LOCAL STATE//////////////////////////////////////
     const [order, setOrder] = useState<OrderFormValues>(new OrderFormValues());

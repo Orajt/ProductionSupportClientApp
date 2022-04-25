@@ -20,7 +20,7 @@ import ManageImages from "./ManageImages";
 export default observer(function ArticleForm() {
 
     ///////////////////////STORES//////////////////////////////////
-    const { articleStore, modalStore } = useStore();
+    const { articleStore} = useStore();
     const { getArticleTypesRS, articleTypesRS, getArticleDetails, clear } = articleStore;
 
     ////////////////ROUTE PARAMS//////////////////////////////////////
@@ -58,7 +58,7 @@ export default observer(function ArticleForm() {
         }
         return clear();
 
-    }, [getArticleDetails, id, getArticleTypesRS]);
+    }, [getArticleDetails, id, getArticleTypesRS, clear]);
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(saveAndSeeDetails: boolean) {

@@ -17,7 +17,7 @@ export default observer(function CompaniesList() {
         setLoading(true);
         getCompanyList().then(() => setLoading(false));
         return clear();
-    }, [getCompanyList]);
+    }, [getCompanyList, clear]);
 
     if (loading) return <LoadingComponent content="loading"></LoadingComponent>;
     if (companyList == null) return <NotFound></NotFound>

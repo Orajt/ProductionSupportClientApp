@@ -41,7 +41,6 @@ import PrivateRoute from './PrivateRoute';
 function App() {
   const location=useLocation();
   const { commonStore, userStore } = useStore();
-  const { isLoggedIn}=userStore;
 
   useEffect(() => {
     if (commonStore.token) {
@@ -106,7 +105,7 @@ function App() {
           <Route path="files/pdf/:id" element={<PrivateRoute component={<ArticlePdf />}/>} />
 
            {/* Images */}
-           <Route path="images/:id" element={<PrivateRoute component={<ImageHighResolution />}/>} />
+           <Route path="img/:id" element={<PrivateRoute component={<ImageHighResolution />}/>} />
 
            {/* Fabric Variants*/}
           <Route path="fabricVariants" element={<PrivateRoute component={<FabricVariantList />}/>} />

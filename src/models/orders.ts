@@ -1,4 +1,3 @@
-import OrderDetails from "../features/orders/OrderList/OrderDetails";
 import { FabricVariantToSetInOrder } from "./fabricVariant";
 import { ReactSelectInt } from "./reactSelect";
 

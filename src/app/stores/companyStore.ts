@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction} from "mobx";
-import { CompanyDetails, CompanyFormValues, CompanyListItem } from "../../models/company";
+import { CompanyDetails, CompanyListItem } from "../../models/company";
 import { Pagination, PagingParams } from "../../models/pagination";
 import { ReactSelectInt } from "../../models/reactSelect";
 import agent from "../api/agent";

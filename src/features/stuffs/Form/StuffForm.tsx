@@ -18,9 +18,8 @@ export default observer(function StuffForm() {
         name: Yup.string().min(3).required(),
     })
     ///////////////////////STORES//////////////////////////////////
-    const { stuffStore, articleStore } = useStore();
+    const { stuffStore} = useStore();
     const { getStuffDetails } = stuffStore;
-    const { articleTypesRS, getArticleTypesRS } = articleStore;
 
     ////////////////LOCAL STATE//////////////////////////////////////
     const [loading, setLoading] = useState(true);
@@ -33,19 +32,23 @@ export default observer(function StuffForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoading(true);
+        
         if (id && !isNaN(parseInt(id))) {
+            setLoading(true);
             getStuffDetails(parseInt(id)).then((value) => {
                 setInitialFormValues(value as StuffFormValues)
             })
             .finally(() => {
                 setTitle("Edit stuff");
                 setEditMode(true);
+                setLoading(false);
             });
         }
-        getArticleTypesRS(true).then(()=> setLoading(false));
+        else{
+            setLoading(false);
+        }
        
-    }, [getArticleTypesRS, getStuffDetails, id]);
+    }, [ getStuffDetails, id]);
 
     ///////////////////////FUNCTIONS//////////////////////////////////////////
     function handleFormSubmit(stuff: StuffFormValues) {

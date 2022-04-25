@@ -30,12 +30,12 @@ export default function ArticleDetailsImage({ fileName, id }: Props) {
             console.log(err);
             setLoading(false);
         }
-    }, [fileName]);
+    }, [fileName, id]);
     if (loading) return <LoadingComponent content="loading"></LoadingComponent>;
     if (file === null) return <NotFound></NotFound>
     return (
         <>
-            <Link to={`/images/${fileName}`}><Image src={URL.createObjectURL(file)}></Image></Link>
+            <Link to={`/img/${fileName}`}><Image src={URL.createObjectURL(file)}></Image></Link>
         </>
     )
 }

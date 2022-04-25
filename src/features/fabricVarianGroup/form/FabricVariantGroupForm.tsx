@@ -45,7 +45,7 @@ export default observer(function FabricVariantGroupForm() {
         }
         setLoading(true);
         getListReactSelect().then(() => setLoading(false));
-    }, [getFabricVariantGroupDetails, id]);
+    }, [getFabricVariantGroupDetails, id, getListReactSelect]);
 
     /////////////////////FUNCTIONS//////////////////////////////////////////
     function sendToserver() {
@@ -104,7 +104,7 @@ export default observer(function FabricVariantGroupForm() {
 
 
     function handleFormSubmit(fv: ReactSelectInt) {
-        if (!variantList.some(p => p.id == fv.value)) {
+        if (!variantList.some(p => p.id === fv.value)) {
             let member = {} as FabricVariantGroupDetailsMember;
             let splitedLabel = fv.label.split(/[()]/);
             console.log(splitedLabel);
@@ -114,7 +114,7 @@ export default observer(function FabricVariantGroupForm() {
             member.placeInGroup = variantList.length + 1;
             var newList = [...variantList, member];
             setVariantList(newList);
-            let newName = name.length == 0 ? `${member.shortName}` : name + `+${member.shortName}`
+            let newName = name.length === 0 ? `${member.shortName}` : name + `+${member.shortName}`
             setName(newName);
         }
     }

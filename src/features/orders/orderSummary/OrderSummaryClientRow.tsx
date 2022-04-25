@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { Grid, Header, Table, TableBody, TableRow } from "semantic-ui-react";
+import { useEffect } from "react";
+import { Table} from "semantic-ui-react";
 import { OrderSummaryClient } from "../../../models/orders";
 import OrderSummarySetRow from "./OrderSummarySetRow";
 

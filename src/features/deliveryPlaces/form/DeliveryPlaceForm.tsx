@@ -49,7 +49,6 @@ export default observer(function DeliveryPlaceForm() {
     const [initialValues, setInitialFormValues] = useState(new DeliveryPlaceFormValues());
     const [title, setTitle] = useState("Create delivery place")
     const [editMode, setEditMode] = useState(false);
-    const [companyPlaceHolder, setCompanyPlaceHolder]=useState("Select company")
 
     ////////////////ROUTE PARAMS//////////////////////////////////////
     const { id } = useParams<{ id: string }>();
@@ -63,7 +62,6 @@ export default observer(function DeliveryPlaceForm() {
             })
             .finally(() => {
                 setTitle("Edit delivery place");
-                setCompanyPlaceHolder(initialValues.companyName)
                 setEditMode(true);
             });
         }

@@ -1,7 +1,7 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import { Grid, Header, Table, TableBody, TableRow } from "semantic-ui-react";
-import { OrderSummaryClient, OrderSummaryPosition } from "../../../models/orders";
+import { useEffect } from "react";
+import { Table} from "semantic-ui-react";
+import { OrderSummaryPosition } from "../../../models/orders";
 
 interface IProps {
     set: OrderSummaryPosition;

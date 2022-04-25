@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button, Checkbox, CheckboxProps, Grid, Header, Table } from "semantic-ui-react";
-import * as Yup from 'yup';
 import { observer } from "mobx-react-lite";
 import Select from "react-select"
 import { useStore } from "../../../app/stores/store";
@@ -14,16 +13,6 @@ import axios from "axios";
 
 export default observer(function AssignStuffToArticleType() {
 
-    ////////////////////Validation////////////////////////////////////
-    const validationSchema = Yup.object({
-        name: Yup.string().min(3).required(),
-        country: Yup.string().min(3).required(),
-        city: Yup.string().min(3).required(),
-        street: Yup.string().min(2).required(),
-        postalCode: Yup.string().min(5).required(),
-        numberOfBuilding: Yup.number().min(1).required(),
-        apartment: Yup.number()
-    })
     ///////////////////////STORES//////////////////////////////////
     const { stuffStore, articleStore } = useStore();
     const { getStuffsListToSelect } = stuffStore;
@@ -50,7 +39,6 @@ export default observer(function AssignStuffToArticleType() {
                 .then(() => getStuffsListToSelect().then((value) => {
                     let listToSelect = value!.filter(i => !i.articleTypesIds.some(x=>x===parseInt(id)))
                     let newValues = listToSelect as ReactSelectInt[];
-                    // let newValues = listToSelect as ReactSelectInt[];
                     setStuffRS(newValues);
                 }))
                 .then(() => setLoading(false))
@@ -82,7 +70,7 @@ export default observer(function AssignStuffToArticleType() {
         setArticleType(newArticleType);
 
         let stuffsToSelect = [...stuffRS];
-        let newStuffs = stuffsToSelect.filter(p => p.value != value.value);
+        let newStuffs = stuffsToSelect.filter(p => p.value !== value.value);
         setStuffRS(newStuffs);
         setAbleToAddStuff(true);
     }
@@ -90,7 +78,7 @@ export default observer(function AssignStuffToArticleType() {
         let newArticleType = { ...articleType, stuffs: [...articleType.stuffs] }
         let stuffsInArticleType = [...articleType.stuffs]
         let newPossibleStuffs = stuffsInArticleType.map(function (stuff, i) {
-            if (indexesToDelete.some(p => p == i))
+            if (indexesToDelete.some(p => p === i))
                 return stuff;
         })
         let newStuffRS = [...stuffRS]
@@ -101,8 +89,6 @@ export default observer(function AssignStuffToArticleType() {
         setStuffRS(newStuffRS.sort(function (a, b) {
             return a.label.localeCompare(b.label)
         }))
-        console.log("To są nowe stuffy, które tutaj powinny być nietknięte");
-        console.log(newArticleType.stuffs);
         newArticleType.stuffs = Utilities.removeItemFromCollectionBasedOnIndex(newArticleType.stuffs, indexesToDelete);
         setIndexesToDelete([]);
         setAbleToAddStuff(true);
